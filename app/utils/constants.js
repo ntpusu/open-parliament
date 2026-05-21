@@ -5,7 +5,7 @@ export const SITE_CONFIG = {
   englishName: 'NTPU Student Congress (Sanxia Campus)',
   domain: 'sxcongress.ntpusu.org',
   email: 'ntpuscs@gmail.com',
-  githubRepo: 'https://github.com/ntpuscs/open-parliament-ntpuscs'
+  githubRepo: 'https://github.com/ntpusu/open-parliament'
 };
 
 // 外部連結設定
