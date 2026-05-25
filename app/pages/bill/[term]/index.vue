@@ -172,9 +172,7 @@ const filteredBills = computed(() => {
     }
 
     // 日期範圍篩選 
-    const billDateISO = typeof formatTimestampToISO === 'function' 
-      ? formatTimestampToISO(bill.submittedAt) 
-      : bill.submittedAt;
+    const billDateISO = normalizeDate(bill.submittedAt)
       
     if (billDateISO) {
       if (filters.value.dateFrom && billDateISO < filters.value.dateFrom) return false
@@ -183,8 +181,8 @@ const filteredBills = computed(() => {
 
     return true
   }).sort((a, b) => {
-    const dateA = typeof formatTimestampToISO === 'function' ? formatTimestampToISO(a.submittedAt) : a.submittedAt;
-    const dateB = typeof formatTimestampToISO === 'function' ? formatTimestampToISO(b.submittedAt) : b.submittedAt;
+    const dateA = normalizeDate(a.submittedAt);
+    const dateB = normalizeDate(b.submittedAt);
     if (!dateA || !dateB) return 0;
     return String(dateB).localeCompare(String(dateA));
   })
@@ -232,6 +230,14 @@ const extractNumberFromNumber = (billNumber) => {
   const match = billNumber.match(/第(\d+)號$/)
   return match ? parseInt(match[1]) : null
 }
+
+const normalizeDate = (date) => {
+  if (!date) return ''
+  if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}/.test(date)) return date
+  const d = new Date(date)
+  return isNaN(d.getTime()) ? '' : d.toISOString()
+}
+
 
 // 監聽前端頁碼變化，僅用於控制 paginatedBills，不觸發 API 請求
 watch(currentPage, () => {
