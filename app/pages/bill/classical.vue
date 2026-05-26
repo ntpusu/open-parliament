@@ -36,7 +36,7 @@ import { computed } from 'vue' // 確保引入 computed
 // SEO 設定
 definePageMeta({
   title: '議案查詢 - 三峽校區議事服務',
-  description: '查看國立臺北大學學生自治會三峽校區學生議會歷屆議案資料'
+  description: '查看'+ORG_DATA.nameZhFull+'歷屆議案資料'
 })
 
 </script>

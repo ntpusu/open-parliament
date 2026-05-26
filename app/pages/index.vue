@@ -100,11 +100,11 @@
           </div>
               <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm">
                 <strong>辦公室：</strong><br />
-                商學大樓 B1F08 室
+                {{ ORG_DATA.office }}
               </p>
               <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm">
                 <strong>議場：</strong><br />
-                綜合體育館 2F44 室
+                {{ ORG_DATA.meetingRoom }}
               </p>
               <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
                 <strong>電子郵件：</strong><br />

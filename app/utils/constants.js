@@ -8,6 +8,17 @@ export const SITE_CONFIG = {
   githubRepo: 'https://github.com/ntpusu/open-parliament'
 };
 
+// 本組織之資料
+export const ORG_DATA = {
+  nameZhFull: '國立臺北大學三峽校區學生議會',
+  nameZhShort: '北大三峽議會',
+  nameEnFull: 'NTPU Student Congress (Sanxia Campus)',
+  nameEnShort: 'NTPUSCS',
+  email: 'ntpuscs@gmail.com',
+  office: '商學大樓 B1F08 室',
+  meetingRoom: '綜合體育館 2F44 室'
+};
+
 // 外部連結設定
 export const EXTERNAL_LINKS = {
   mainWebsite: 'https://ntpusu.org/',

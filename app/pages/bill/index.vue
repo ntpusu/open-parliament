@@ -84,7 +84,7 @@ const { data: newestBills, pending, error,  } = await useFetch(`/api/bills?limit
 // SEO 設定
 definePageMeta({
   title: '議案查詢',
-  description: '查看國立臺北大學三峽校區學生議會歷屆議案資料。'
+  description: '查看'+ORG_DATA.nameZhFull+'歷屆議案資料。'
 })
 
 </script>

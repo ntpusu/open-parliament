@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4 py-8">
     <!-- 列印專用標題 -->
     <div class="hidden print:block text-center mb-8">
-      <h1 class="text-2xl font-bold">國立臺北大學三峽校區學生議會提案資料</h1>
+      <h1 class="text-2xl font-bold">{{ORG_DATA.nameZhFull}}提案資料</h1>
     </div>
 
     <!-- 導覽列與麵包屑：列印時隱藏 -->
