@@ -74,7 +74,7 @@
                 >
                   <div v-if="field.key === 'attachments'" class="space-y-2">
                     <!-- 非列印模式：顯示連結 -->
-                    <div v-if="!window?.matchMedia?.('print').matches" class="print:hidden">
+                    <div v-if="!isPrintMedia" class="print:hidden">
                       <div
                         v-for="(attachment, attachIndex) in getAttachments(bill)"
                         :key="attachIndex"
@@ -115,13 +115,15 @@
                     v-else-if="field.isMultiline && field.key === 'description'"
                     class="whitespace-pre-wrap"
                   >
-                    <span v-html="formatIndentedDescription(bill[field.key])"></span>
+                    <span
+                      v-html="formatIndentedDescription(String(getField(field.key) ?? ''))"
+                    ></span>
                   </div>
                   <div v-else-if="field.isMultiline" class="whitespace-pre-wrap">
-                    {{ bill[field.key] || '無' }}
+                    {{ getField(field.key) || '無' }}
                   </div>
                   <div v-else>
-                    {{ bill[field.key] || '無' }}
+                    {{ getField(field.key) || '無' }}
                   </div>
                 </td>
               </tr>
@@ -198,11 +200,14 @@
     PrinterIcon,
   } from '@heroicons/vue/24/outline';
   import { getCurrentTerm } from '#imports';
+  import { useRoute, createError, useFetch, useHead } from '#app';
+  import { ORG_DATA } from '~/utils/constants';
+  import type { Bill } from '~~/shared/types/bill';
 
   // 獲取路由參數
   const route = useRoute();
-  const term = computed(() => parseInt(route.params.term));
-  const number = computed(() => parseInt(route.params.number));
+  const term = computed(() => parseInt(route.params.term as string));
+  const number = computed(() => parseInt(route.params.number as string));
 
   if (!term.value || isNaN(term.value) || !number.value || isNaN(number.value)) {
     throw createError({
@@ -211,7 +216,12 @@
     });
   }
 
-  const { data: bill, status, error } = await useFetch(`/api/bills/${term.value}/${number.value}`);
+  const {
+    data: bill,
+    pending,
+    status,
+    error,
+  } = await useFetch<Bill>(`/api/bills/${term.value}/${number.value}`);
 
   const tempBillNumber = computed(() => {
     if (bill.value?.billNumber) {
@@ -252,13 +262,19 @@
     { label: '排入會議', key: 'scheduledSession' },
   ]);
 
+  // helper: 動態欄位取值（搭配 displayFields 的 key）
+  const getField = (fieldName: string): unknown => {
+    if (!bill.value) return undefined;
+    return (bill.value as unknown as Record<string, unknown>)[fieldName];
+  };
+
   // 說明欄位：偵測每行是否以「一、」等開頭，若是則凸排兩全形字元
-  function formatIndentedDescription(desc) {
+  function formatIndentedDescription(desc: string) {
     if (!desc) return '無';
     const cjkNums = '一二三四五六七八九十';
     return desc
       .split('\n')
-      .map((line) => {
+      .map((line: string) => {
         if (line.match(new RegExp(`^[${cjkNums}]、`))) {
           // 使用 <p> 並套用 text-indent 與 margin-left
           return `<p style="text-indent: -2em; margin-left: 2em;">${line}</p>`;
@@ -269,7 +285,7 @@
   }
 
   // 附件欄位：各附件編號、嘗試解析檔名或 Google Drive
-  const getAttachments = (billData) => {
+  const getAttachments = (billData: Bill | null | undefined) => {
     if (!billData || !Array.isArray(billData.attachments)) return [];
 
     return billData.attachments
@@ -307,7 +323,14 @@
 
   // 複製連結功能
   const showCopySuccess = ref(false);
+
+  // 判斷是否為列印媒體，替代 template 中直接存取 window
+  const isPrintMedia = computed(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia?.('print').matches ?? false;
+  });
   const copyUrl = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     navigator.clipboard
       .writeText(url)
@@ -317,7 +340,7 @@
           showCopySuccess.value = false;
         }, 2000);
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         console.error('Failed to copy URL:', err);
         alert('複製連結失敗，請手動複製。');
       });
@@ -325,13 +348,14 @@
 
   // 列印功能
   const printPage = () => {
+    if (typeof window === 'undefined') return;
     window.print();
   };
 
   // 列印頁尾資訊
   const printFooterText = computed(() => {
     const now = new Date();
-    const pad = (n) => n.toString().padStart(2, '0');
+    const pad = (n: number) => n.toString().padStart(2, '0');
     const dateStr = `資料為${now.getFullYear() - 1911}年${now.getMonth() + 1}月${now.getDate()}日${pad(now.getHours())}時${pad(now.getMinutes())}分${pad(now.getSeconds())}秒`;
     return `${dateStr}自網址 ${typeof window !== 'undefined' ? window.location.href : ''} 載入。`;
   });
