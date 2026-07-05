@@ -53,26 +53,53 @@ export const useBillService = () => {
     return res.cachedAt;
   };
 
+  // ── 內部輔助：判斷 targetTerm 的議案是否落在 bill_latestTerm.json 中 ──
+  // 換屆過渡期時，isCurrentTermBills(latest) 為 false，代表 latest
+  // 實際存放的是 currentTerm - 1 屆的資料，此時應從 latest 撈而非 past。
+  const resolveDataSource = async (
+    targetTerm: number,
+  ): Promise<{ bills: Bill[]; isCurrentTermData: boolean }> => {
+    const currentTerm = getCurrentTerm();
+
+    // 當前屆次 → 一定從 latest 撈
+    if (targetTerm === currentTerm) {
+      const latest = await getLatestTermBills();
+      return { bills: latest, isCurrentTermData: isCurrentTermBills(latest) };
+    }
+
+    // 前一屆次（currentTerm - 1）：先檢查 latest 是否仍為舊屆資料
+    if (targetTerm === currentTerm - 1) {
+      const latest = await getLatestTermBills();
+      if (!isCurrentTermBills(latest)) {
+        // latest 實際就是 targetTerm 的資料
+        return { bills: latest, isCurrentTermData: false };
+      }
+      // latest 已是 currentTerm 的資料，前屆在 past 裡
+      const past = await getPastTermBills();
+      return { bills: past, isCurrentTermData: false };
+    }
+
+    // 更早的屆次：一律從 past 撈
+    const past = await getPastTermBills();
+    return { bills: past, isCurrentTermData: false };
+  };
+
   // 取得特定屆次的所有議案
   const getBillsByTerm = async (targetTerm: number): Promise<Bill[]> => {
     const currentTerm = getCurrentTerm();
 
-    if (targetTerm === currentTerm) {
-      const latestBills = await getLatestTermBills();
-      // 換屆過渡期：bill_latestTerm.json 可能仍是舊屆資料
-      if (!isCurrentTermBills(latestBills)) {
-        return [];
-      }
-      return latestBills;
-    }
-
     if (targetTerm > currentTerm) {
-      // 請求的屆次尚未到來
       return [];
     }
 
-    const pastBills = await getPastTermBills();
-    return pastBills.filter((bill) => bill.term === targetTerm);
+    const { bills, isCurrentTermData } = await resolveDataSource(targetTerm);
+
+    // 請求的是當前屆次，但資料尚未更新
+    if (targetTerm === currentTerm && !isCurrentTermData) {
+      return [];
+    }
+
+    return bills.filter((bill) => bill.term === targetTerm);
   };
 
   // 依議案總流水號（rowIndex）取得單一議案
@@ -88,11 +115,10 @@ export const useBillService = () => {
     targetSerialNumber: number,
   ): Promise<Bill | undefined> => {
     const currentTerm = getCurrentTerm();
-    const isCurrent = targetTerm === currentTerm;
-    const bills = isCurrent ? await getLatestTermBills() : await getPastTermBills();
+    const { bills, isCurrentTermData } = await resolveDataSource(targetTerm);
 
-    // 換屆過渡期：請求當前屆次，但資料來源仍是舊屆
-    if (isCurrent && !isCurrentTermBills(bills)) {
+    // 請求的是當前屆次，但資料尚未更新
+    if (targetTerm === currentTerm && !isCurrentTermData) {
       return undefined;
     }
 
