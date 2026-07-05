@@ -37,3 +37,16 @@ export const getValidTerms = (): number[] => {
 export const getEarliestTerm = (): number => {
   return 23;
 };
+
+/**
+ * 檢查給定的議案陣列是否確實屬於當前屆次。
+ * 場景：換屆時 bill_latestTerm.json 尚未更新，資料 term 仍為舊屆，
+ * 但 getCurrentTerm() 已回傳新屆次，此時應回傳 false。
+ *
+ * @param bills  議案陣列
+ * @returns      若任一個 bill.term === getCurrentTerm() 則為 true
+ */
+export const isCurrentTermBills = (bills: { term?: number | null }[]): boolean => {
+  const currentTerm = getCurrentTerm();
+  return bills.some((bill) => bill.term === currentTerm);
+};

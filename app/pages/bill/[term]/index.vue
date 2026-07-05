@@ -89,8 +89,19 @@
 
       <div v-if="!pending && !error && filteredBills.length === 0" class="text-center py-12">
         <DocumentTextIcon class="h-16 w-16 text-gray-400 mx-auto mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">找不到相關議案</h3>
-        <p class="text-gray-600 dark:text-gray-300">請調整篩選條件或稍後再試</p>
+        <!-- 換屆過渡期：當前屆次尚無議案資料 -->
+        <template v-if="term === getCurrentTerm()">
+          <h3 class="text-lg font-medium text-amber-700 dark:text-amber-300 mb-2">
+            第 {{ term }} 屆尚未有任何提案資料
+          </h3>
+          <p class="text-amber-600 dark:text-amber-400">
+            請查看其他屆次，或等待資料更新
+          </p>
+        </template>
+        <template v-else>
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">找不到相關議案</h3>
+          <p class="text-gray-600 dark:text-gray-300">請調整篩選條件或稍後再試</p>
+        </template>
       </div>
     </template>
   </div>
@@ -100,6 +111,7 @@
   import { ref, computed, watch } from 'vue';
   import { useRoute } from 'vue-router';
   import { ExclamationTriangleIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
+  import { getCurrentTerm, getValidTerms } from '~~/shared/utils/term';
 
   const route = useRoute();
   const term = parseInt(route.params.term);

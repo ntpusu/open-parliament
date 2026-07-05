@@ -1,6 +1,6 @@
 // server/utils/billService.ts
 import type { Bill, BillResponse } from '../../shared/types/bill';
-import { getCurrentTerm } from '../../shared/utils/term';
+import { getCurrentTerm, isCurrentTermBills } from '../../shared/utils/term';
 
 export const useBillService = () => {
   const CDN_BASE_URL = 'https://cdn.jsdelivr.net/gh/ntpusu/legislative-data@main/data';
@@ -55,8 +55,20 @@ export const useBillService = () => {
 
   // 取得特定屆次的所有議案
   const getBillsByTerm = async (targetTerm: number): Promise<Bill[]> => {
-    if (targetTerm === getCurrentTerm()) {
-      return await getLatestTermBills();
+    const currentTerm = getCurrentTerm();
+
+    if (targetTerm === currentTerm) {
+      const latestBills = await getLatestTermBills();
+      // 換屆過渡期：bill_latestTerm.json 可能仍是舊屆資料
+      if (!isCurrentTermBills(latestBills)) {
+        return [];
+      }
+      return latestBills;
+    }
+
+    if (targetTerm > currentTerm) {
+      // 請求的屆次尚未到來
+      return [];
     }
 
     const pastBills = await getPastTermBills();
@@ -75,8 +87,14 @@ export const useBillService = () => {
     targetTerm: number,
     targetSerialNumber: number,
   ): Promise<Bill | undefined> => {
-    const bills =
-      targetTerm === getCurrentTerm() ? await getLatestTermBills() : await getPastTermBills();
+    const currentTerm = getCurrentTerm();
+    const isCurrent = targetTerm === currentTerm;
+    const bills = isCurrent ? await getLatestTermBills() : await getPastTermBills();
+
+    // 換屆過渡期：請求當前屆次，但資料來源仍是舊屆
+    if (isCurrent && !isCurrentTermBills(bills)) {
+      return undefined;
+    }
 
     const target = bills.find(
       (bill) => bill.term === targetTerm && bill.serialNumber === targetSerialNumber,
