@@ -1,27 +1,31 @@
 <!-- app/pages/secretariat/agenda.vue -->
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import { definePageMeta } from '#imports'
-import { useSecretariat } from '~/composables/useSecretariat'
+  import { ref, watch, onMounted } from 'vue';
+  import { definePageMeta } from '#imports';
+  import { useSecretariat } from '~/composables/useSecretariat';
 
-definePageMeta({
-  middleware: ['auth']
-})
+  definePageMeta({
+    middleware: ['auth'],
+  });
 
-const { bills, currentTerm, isLoading, error, generateAgenda, fetchBills } = useSecretariat();
+  const { bills, currentTerm, isLoading, error, generateAgenda, fetchBills } = useSecretariat();
 
-const billOrderInput = ref('');
-const generatedAgenda = ref('');
+  const billOrderInput = ref('');
+  const generatedAgenda = ref('');
 
-watch([billOrderInput, bills], () => {
-  generatedAgenda.value = generateAgenda(billOrderInput.value);
-}, { immediate: true });
+  watch(
+    [billOrderInput, bills],
+    () => {
+      generatedAgenda.value = generateAgenda(billOrderInput.value);
+    },
+    { immediate: true },
+  );
 
-onMounted(() => {
-  if (!bills.value.length && !isLoading.value && !error.value) {
-    fetchBills();
-  }
-});
+  onMounted(() => {
+    if (!bills.value.length && !isLoading.value && !error.value) {
+      fetchBills();
+    }
+  });
 </script>
 
 <template>
@@ -38,12 +42,8 @@ onMounted(() => {
         如此 SSR 與 CSR 的 HTML 結構完全一致，消除 hydration mismatch。
       -->
       <ClientOnly>
-        <div v-if="isLoading" class="text-center text-blue-500 mb-4">
-          載入議案資料中...
-        </div>
-        <div v-else-if="error" class="text-center text-red-500 mb-4">
-          錯誤：{{ error }}
-        </div>
+        <div v-if="isLoading" class="text-center text-blue-500 mb-4">載入議案資料中...</div>
+        <div v-else-if="error" class="text-center text-red-500 mb-4">錯誤：{{ error }}</div>
         <div v-else-if="!bills.length" class="text-center text-yellow-600 mb-4">
           未找到當前屆期的議案資料。
         </div>

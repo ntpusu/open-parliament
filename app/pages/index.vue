@@ -3,23 +3,29 @@
     <!-- 主標題區塊 -->
     <div class="text-center mb-12">
       <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        {{SITE_CONFIG.name}}
+        {{ SITE_CONFIG.name }}
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-400">
-        {{SITE_CONFIG.fullName}}
+        {{ SITE_CONFIG.fullName }}
       </p>
     </div>
 
     <!-- 服務區塊 -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
       <!-- 議案查詢 -->
       <div class="card">
         <div class="card-body">
           <div class="flex items-center mb-4">
-            <div class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3">
+            <div
+              class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3"
+            >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
               </svg>
             </div>
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">議案查詢</h2>
@@ -30,7 +36,12 @@
           <NuxtLink to="/bill" class="btn btn-primary">
             開始查詢
             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </NuxtLink>
         </div>
@@ -40,23 +51,30 @@
       <div class="card">
         <div class="card-body">
           <div class="flex items-center mb-4">
-            <div class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3">
+            <div
+              class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3"
+            >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
             </div>
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">委員會報告</h2>
           </div>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">
-            委員會建議報告及學生會回覆。
-          </p>
-          <NuxtLink 
-            to="/committee-reports" 
-            class="btn btn-primary"
-          >
+          <p class="text-gray-600 dark:text-gray-400 mb-4">委員會建議報告及學生會回覆。</p>
+          <NuxtLink to="/committee-reports" class="btn btn-primary">
             查看報告
             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </NuxtLink>
         </div>
@@ -66,52 +84,78 @@
       <div class="card">
         <div class="card-body">
           <div class="flex items-center mb-4">
-            <div class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3">
+            <div
+              class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3"
+            >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                />
               </svg>
             </div>
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">文件草擬輔助</h2>
           </div>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">
-            供秘書處內部用以輔助草擬議事文件。
-          </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">供秘書處內部用以輔助草擬議事文件。</p>
           <NuxtLink to="/secretariat" class="btn btn-primary">
             進入系統
             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </NuxtLink>
         </div>
       </div>
 
-
       <!-- 本會聯絡方式 -->
       <div class="card">
         <div class="card-body">
           <div class="flex items-center mb-4">
-            <div class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3">
+            <div
+              class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center mr-3"
+            >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h2a2 2 0 012 2v2H8V5z"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 5a2 2 0 012-2h2a2 2 0 012 2v2H8V5z"
+                />
               </svg>
             </div>
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">聯絡我們</h2>
           </div>
-              <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm">
-                <strong>辦公室：</strong><br />
-                {{ ORG_DATA.office }}
-              </p>
-              <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm">
-                <strong>議場：</strong><br />
-                {{ ORG_DATA.meetingRoom }}
-              </p>
-              <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
-                <strong>電子郵件：</strong><br />
-                <a href="https://pili.app/email-html/show/?text=ntpuscs%40gmail.com&title=%E4%B8%89%E5%B3%BD%E6%A0%A1%E5%8D%80%E5%AD%B8%E7%94%9F%E8%AD%B0%E6%9C%83%20%E7%A7%98%E6%9B%B8%E8%99%95" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" target="_blank" rel="noopener noreferrer">
-                  請點此展開
-                </a>
-              </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm">
+            <strong>辦公室：</strong><br />
+            {{ ORG_DATA.office }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm">
+            <strong>議場：</strong><br />
+            {{ ORG_DATA.meetingRoom }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">
+            <strong>電子郵件：</strong><br />
+            <a
+              href="https://pili.app/email-html/show/?text=ntpuscs%40gmail.com&title=%E4%B8%89%E5%B3%BD%E6%A0%A1%E5%8D%80%E5%AD%B8%E7%94%9F%E8%AD%B0%E6%9C%83%20%E7%A7%98%E6%9B%B8%E8%99%95"
+              class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              請點此展開
+            </a>
+          </p>
         </div>
       </div>
     </div>
@@ -140,35 +184,35 @@
 </template>
 
 <script setup>
-const config = useRuntimeConfig()
+  const config = useRuntimeConfig();
 
-// 設定頁面 meta 標籤
-useHead({
-  title: SITE_CONFIG.name,
-  meta: [
-    { name: 'description', content: '國立臺北大學學生自治會三峽校區學生議會議事服務系統首頁' }
-  ]
-})
+  // 設定頁面 meta 標籤
+  useHead({
+    title: SITE_CONFIG.name,
+    meta: [
+      { name: 'description', content: '國立臺北大學學生自治會三峽校區學生議會議事服務系統首頁' },
+    ],
+  });
 
-// 統計資料
-const stats = ref({
-  totalBills: 0,
-  thisTermBills: 0
-})
+  // 統計資料
+  const stats = ref({
+    totalBills: 0,
+    thisTermBills: 0,
+  });
 
-// 載入統計資料
-onMounted(async () => {
-  try {
-    const { data } = await $fetch('/api/bills/stats')
-    if (data) {
-      stats.value = data
+  // 載入統計資料
+  onMounted(async () => {
+    try {
+      const { data } = await $fetch('/api/bills/stats');
+      if (data) {
+        stats.value = data;
+      }
+    } catch (error) {
+      console.error('載入統計資料失敗:', error);
     }
-  } catch (error) {
-    console.error('載入統計資料失敗:', error)
-  }
-})
+  });
 
-import { getCurrentTerm } from '../../shared/utils/term.js'
+  import { getCurrentTerm } from '../../shared/utils/term.js';
 
-import { EXTERNAL_LINKS, SITE_CONFIG } from '~/utils/constants.js'
+  import { EXTERNAL_LINKS, SITE_CONFIG } from '~/utils/constants.js';
 </script>

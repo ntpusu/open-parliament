@@ -12,7 +12,7 @@ export const getCurrentTerm = (): number => {
 
   // 如果月份小於 7 (1月~6月)，則屬於「前一年」開始的屆次
   const baseYear = month < 7 ? year - 1 : year;
-  
+
   // 國立臺北大學係 2000 年 2 月成立，故學生自治會屆次以 2000 年為基準年（第 1 屆），因此計算方式為 (baseYear - 1999)。
   return baseYear - 1999;
 };
@@ -24,11 +24,11 @@ export const getCurrentTerm = (): number => {
 export const getValidTerms = (): number[] => {
   const currentTerm = getCurrentTerm();
   const validTerms: number[] = [];
-  
+
   for (let term = 23; term <= currentTerm; term++) {
     validTerms.push(term);
   }
-  
+
   // 習慣上會將最新屆次排在最前面 (降冪)
   return validTerms.reverse();
 };

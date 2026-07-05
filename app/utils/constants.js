@@ -5,7 +5,7 @@ export const SITE_CONFIG = {
   englishName: 'NTPU Student Congress (Sanxia Campus)',
   domain: 'sxcongress.ntpusu.org',
   email: 'ntpuscs@gmail.com',
-  githubRepo: 'https://github.com/ntpusu/open-parliament'
+  githubRepo: 'https://github.com/ntpusu/open-parliament',
 };
 
 // 本組織之資料
@@ -16,7 +16,7 @@ export const ORG_DATA = {
   nameEnShort: 'NTPUSCS',
   email: 'ntpuscs@gmail.com',
   office: '商學大樓 B1F08 室',
-  meetingRoom: '綜合體育館 2F44 室'
+  meetingRoom: '綜合體育館 2F44 室',
 };
 
 // 外部連結設定
@@ -33,7 +33,7 @@ export const THEME_COLORS = {
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
-  info: '#3B82F6'
+  info: '#3B82F6',
 };
 
 // 響應式斷點
@@ -42,7 +42,7 @@ export const BREAKPOINTS = {
   md: '768px',
   lg: '1024px',
   xl: '1280px',
-  '2xl': '1536px'
+  '2xl': '1536px',
 };
 
 // 錯誤訊息
@@ -54,14 +54,14 @@ export const ERROR_MESSAGES = {
   unauthorized: '未授權存取',
   forbidden: '禁止存取',
   timeout: '請求逾時',
-  unknown: '未知錯誤'
+  unknown: '未知錯誤',
 };
 
 // 成功訊息
 export const SUCCESS_MESSAGES = {
   dataLoaded: '資料載入成功',
   searchCompleted: '搜尋完成',
-  filterApplied: '篩選條件已套用'
+  filterApplied: '篩選條件已套用',
 };
 
 // 載入狀態文字
@@ -69,14 +69,14 @@ export const LOADING_MESSAGES = {
   bills: '正在載入議案資料...',
   search: '正在搜尋...',
   filter: '正在篩選...',
-  page: '正在載入頁面...'
+  page: '正在載入頁面...',
 };
 
 // 空資料訊息
 export const EMPTY_MESSAGES = {
   noBills: '目前沒有議案資料',
   noResults: '沒有符合條件的議案',
-  noAttachments: '無附件'
+  noAttachments: '無附件',
 };
 
 // 議案編號正規表達式
@@ -88,7 +88,7 @@ export const parseBillNumber = (billNumber) => {
   if (match) {
     return {
       term: parseInt(match[1]),
-      number: parseInt(match[2])
+      number: parseInt(match[2]),
     };
   }
   return null;
@@ -107,7 +107,7 @@ export const formatDate = (dateString) => {
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 };
 
@@ -120,19 +120,19 @@ export const isValidGoogleDriveLink = (url) => {
 // 將 Google Drive 分享連結轉換為直接檢視連結
 export const convertGoogleDriveLink = (url) => {
   if (!url) return '';
-  
+
   // 處理 /open?id= 格式
   const openIdMatch = url.match(/\/open\?id=([a-zA-Z0-9_-]+)/);
   if (openIdMatch) {
     return `https://drive.google.com/file/d/${openIdMatch[1]}/view`;
   }
-  
+
   // 處理 /file/d/ 格式
   const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (fileIdMatch) {
     return `https://drive.google.com/file/d/${fileIdMatch[1]}/view`;
   }
-  
+
   return url;
 };
 
@@ -151,5 +151,5 @@ export default {
   formatBillNumber,
   formatDate,
   isValidGoogleDriveLink,
-  convertGoogleDriveLink
+  convertGoogleDriveLink,
 };

@@ -24,9 +24,9 @@ export const useBillService = () => {
     } catch (error) {
       // 錯誤拋出，並額外紀錄錯誤原因方便維護
       console.error(`[CDN Fetch Error] ${filename}:`, error);
-      throw createError({ 
-        statusCode: 500, 
-        statusMessage: `無法從遠端取得議案資料檔案 ${filename} !` 
+      throw createError({
+        statusCode: 500,
+        statusMessage: `無法從遠端取得議案資料檔案 ${filename} !`,
       });
     }
   };
@@ -60,24 +60,26 @@ export const useBillService = () => {
     }
 
     const pastBills = await getPastTermBills();
-    return pastBills.filter(bill => bill.term === targetTerm);
+    return pastBills.filter((bill) => bill.term === targetTerm);
   };
 
   // 依議案總流水號（rowIndex）取得單一議案
   const getBillByRowIndex = async (targetRowIndex: number): Promise<Bill | undefined> => {
     const allBills = await getAllBills();
-    return allBills.find(bill => bill.rowIndex === targetRowIndex);
+    return allBills.find((bill) => bill.rowIndex === targetRowIndex);
   };
 
   // 由屆次 + 流水號取得單一特定議案
   // 先以 term/serialNumber 定位 rowIndex，再交由 getBillByRowIndex 取值
-  const getBillById = async (targetTerm: number, targetSerialNumber: number): Promise<Bill | undefined> => {
-    const bills = targetTerm === getCurrentTerm()
-      ? await getLatestTermBills()
-      : await getPastTermBills();
+  const getBillById = async (
+    targetTerm: number,
+    targetSerialNumber: number,
+  ): Promise<Bill | undefined> => {
+    const bills =
+      targetTerm === getCurrentTerm() ? await getLatestTermBills() : await getPastTermBills();
 
     const target = bills.find(
-      bill => bill.term === targetTerm && bill.serialNumber === targetSerialNumber
+      (bill) => bill.term === targetTerm && bill.serialNumber === targetSerialNumber,
     );
 
     if (!target) return undefined;
@@ -87,10 +89,7 @@ export const useBillService = () => {
 
   // 取得所有議案
   const getAllBills = async (): Promise<Bill[]> => {
-    const [latest, past] = await Promise.all([
-      getLatestTermBills(),
-      getPastTermBills()
-    ]);
+    const [latest, past] = await Promise.all([getLatestTermBills(), getPastTermBills()]);
     return [...latest, ...past];
   };
 
@@ -101,6 +100,6 @@ export const useBillService = () => {
     getBillsByTerm,
     getBillByRowIndex,
     getBillById,
-    getAllBills
+    getAllBills,
   };
 };

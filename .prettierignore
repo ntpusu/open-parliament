@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build output
+.nuxt
+.output
+dist
+
+# Lockfile
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.*
+*.local
+
+# IDE / Editor
+.zed
+.vscode
+.idea
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Coverage / test output
+coverage
+
+# TypeScript declaration
+*.d.ts
+
+# Public static files (already optimized)
+public/favicon.ico

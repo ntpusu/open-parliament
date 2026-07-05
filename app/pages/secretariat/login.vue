@@ -1,48 +1,48 @@
 <!-- pages/secretariat/login.vue -->
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+  import { ref } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
 
-const password = ref('');
-const errorMessage = ref('');
-const isLoading = ref(false);
-const router = useRouter();
-const route = useRoute();
+  const password = ref('');
+  const errorMessage = ref('');
+  const isLoading = ref(false);
+  const router = useRouter();
+  const route = useRoute();
 
-const handleLogin = async () => {
-  errorMessage.value = '';
-  isLoading.value = true;
+  const handleLogin = async () => {
+    errorMessage.value = '';
+    isLoading.value = true;
 
-  try {
-    // 向伺服器端 API 發送密碼進行驗證
-    const response = await fetch('/api/secretariat/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ password: password.value }),
-    });
+    try {
+      // 向伺服器端 API 發送密碼進行驗證
+      const response = await fetch('/api/secretariat/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: password.value }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok && data.authenticated) {
-      // 驗證成功，設定 sessionStorage 標記
-      sessionStorage.setItem('secretariat_authenticated', 'true');
+      if (response.ok && data.authenticated) {
+        // 驗證成功，設定 sessionStorage 標記
+        sessionStorage.setItem('secretariat_authenticated', 'true');
 
-      // 導向使用者原本想訪問的頁面，或預設導向秘書處首頁
-      const redirectPath = route.query.redirect?.toString() || '/secretariat';
-      router.push(redirectPath);
-    } else {
-      // 驗證失敗
-      errorMessage.value = data.message || '密碼錯誤，請重試。';
+        // 導向使用者原本想訪問的頁面，或預設導向秘書處首頁
+        const redirectPath = route.query.redirect?.toString() || '/secretariat';
+        router.push(redirectPath);
+      } else {
+        // 驗證失敗
+        errorMessage.value = data.message || '密碼錯誤，請重試。';
+      }
+    } catch (error) {
+      console.error('登入請求失敗:', error);
+      errorMessage.value = '網路錯誤或伺服器無回應，請稍後再試。';
+    } finally {
+      isLoading.value = false;
     }
-  } catch (error) {
-    console.error('登入請求失敗:', error);
-    errorMessage.value = '網路錯誤或伺服器無回應，請稍後再試。';
-  } finally {
-    isLoading.value = false;
-  }
-};
+  };
 </script>
 
 <template>
@@ -54,20 +54,42 @@ const handleLogin = async () => {
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
           <label for="password" class="sr-only">授權碼</label>
-          <input type="password" id="password" v-model="password" required
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            required
             class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="請輸入授權碼(密碼)" :disabled="isLoading" />
+            placeholder="請輸入授權碼(密碼)"
+            :disabled="isLoading"
+          />
         </div>
 
-        <button type="submit" :disabled="isLoading"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md flex items-center justify-center">
+        <button
+          type="submit"
+          :disabled="isLoading"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md flex items-center justify-center"
+        >
           <span v-if="isLoading" class="flex items-center">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
+            <svg
+              class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
             登入中...
           </span>

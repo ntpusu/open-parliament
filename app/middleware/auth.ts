@@ -1,7 +1,7 @@
 // middleware/auth.ts
 console.log('Auth middleware file loaded. (This should always appear if file is loaded)'); // <-- 新增的頂部日誌
 
-import { defineNuxtRouteMiddleware, navigateTo } from '#app'
+import { defineNuxtRouteMiddleware, navigateTo } from '#app';
 
 export default defineNuxtRouteMiddleware((to, from) => {
   console.log('[Auth Middleware] 執行中介軟體，目標路徑:', to.fullPath);
@@ -12,7 +12,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     if (isAuthenticated) {
       console.log('[Auth Middleware] 已驗證，允許繼續。');
-      return // 已驗證，允許繼續
+      return; // 已驗證，允許繼續
     } else {
       console.log('[Auth Middleware] 未驗證，導向登入頁面。');
       // 未驗證，導向登入頁面

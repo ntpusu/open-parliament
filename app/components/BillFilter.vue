@@ -7,9 +7,18 @@
       <span class="mr-2">篩選議案</span>
       <svg
         :class="['transition-transform', isCollapsed ? 'rotate-0' : 'rotate-180']"
-        width="20" height="20" fill="none" viewBox="0 0 20 20"
+        width="20"
+        height="20"
+        fill="none"
+        viewBox="0 0 20 20"
       >
-        <path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path
+          d="M6 8l4 4 4-4"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
       </svg>
     </h3>
     <div v-show="!isCollapsed">
@@ -94,7 +103,6 @@
             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
         </div>
-        
 
         <!-- 案由篩選 -->
         <div class="filter-group">
@@ -147,7 +155,6 @@
             placeholder="排入會議關鍵字..."
           />
         </div>
-
       </div>
 
       <!-- 操作按鈕 -->
@@ -170,50 +177,18 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+  import { ref, watch } from 'vue';
 
-const props = defineProps({
-  filters: {
-    type: Object,
-    default: () => ({})
-  }
-})
+  const props = defineProps({
+    filters: {
+      type: Object,
+      default: () => ({}),
+    },
+  });
 
-const emit = defineEmits(['update:filters'])
+  const emit = defineEmits(['update:filters']);
 
-const localFilters = ref({
-  編號: '',
-  '提案機關/議員': '',
-  '提案機關主管/提案議員姓名': '',
-  提案類型: '',
-  案由: '',
-  說明: '',
-  辦法: '',
-  排入會議: '',
-  dateFrom: '',
-  dateTo: '',
-  ...props.filters
-})
-
-// 監聽父組件傳入的篩選條件變化
-watch(() => props.filters, (newFilters) => {
-  localFilters.value = { ...localFilters.value, ...newFilters }
-}, { deep: true })
-
-const applyFilters = () => {
-  // 過濾掉空值
-  const activeFilters = Object.entries(localFilters.value)
-    .filter(([key, value]) => value !== '' && value !== null && value !== undefined)
-    .reduce((acc, [key, value]) => {
-      acc[key] = value
-      return acc
-    }, {})
-  
-  emit('update:filters', activeFilters)
-}
-
-const clearFilters = () => {
-  localFilters.value = {
+  const localFilters = ref({
     編號: '',
     '提案機關/議員': '',
     '提案機關主管/提案議員姓名': '',
@@ -223,41 +198,77 @@ const clearFilters = () => {
     辦法: '',
     排入會議: '',
     dateFrom: '',
-    dateTo: ''
-  }
-  emit('update:filters', {})
-}
+    dateTo: '',
+    ...props.filters,
+  });
 
-const isCollapsed = ref(true)
+  // 監聽父組件傳入的篩選條件變化
+  watch(
+    () => props.filters,
+    (newFilters) => {
+      localFilters.value = { ...localFilters.value, ...newFilters };
+    },
+    { deep: true },
+  );
 
-// 實時篩選（可選，如果需要即時篩選效果）
-// watch(localFilters, () => {
-//   applyFilters()
-// }, { deep: true })
+  const applyFilters = () => {
+    // 過濾掉空值
+    const activeFilters = Object.entries(localFilters.value)
+      .filter(([key, value]) => value !== '' && value !== null && value !== undefined)
+      .reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {});
+
+    emit('update:filters', activeFilters);
+  };
+
+  const clearFilters = () => {
+    localFilters.value = {
+      編號: '',
+      '提案機關/議員': '',
+      '提案機關主管/提案議員姓名': '',
+      提案類型: '',
+      案由: '',
+      說明: '',
+      辦法: '',
+      排入會議: '',
+      dateFrom: '',
+      dateTo: '',
+    };
+    emit('update:filters', {});
+  };
+
+  const isCollapsed = ref(true);
+
+  // 實時篩選（可選，如果需要即時篩選效果）
+  // watch(localFilters, () => {
+  //   applyFilters()
+  // }, { deep: true })
 </script>
 
 <style scoped>
-.filter-group {
-  @apply flex flex-col;
-}
+  .filter-group {
+    @apply flex flex-col;
+  }
 
-.bg-primary {
-  background-color: #0F2D4B;
-}
+  .bg-primary {
+    background-color: #0f2d4b;
+  }
 
-.bg-primary-dark {
-  background-color: #0a1f35;
-}
+  .bg-primary-dark {
+    background-color: #0a1f35;
+  }
 
-.ring-primary {
-  --tw-ring-color: #0F2D4B;
-}
+  .ring-primary {
+    --tw-ring-color: #0f2d4b;
+  }
 
-.focus\:ring-primary:focus {
-  --tw-ring-color: #0F2D4B;
-}
+  .focus\:ring-primary:focus {
+    --tw-ring-color: #0f2d4b;
+  }
 
-.border-primary {
-  border-color: #0F2D4B;
-}
+  .border-primary {
+    border-color: #0f2d4b;
+  }
 </style>

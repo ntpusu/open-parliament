@@ -1,14 +1,11 @@
-import { SITE_CONFIG } from "#imports";
+import { SITE_CONFIG } from '#imports';
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-02-26',
   devtools: {
-    enabled: process.env.NODE_ENV === 'development'
+    enabled: process.env.NODE_ENV === 'development',
   },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/color-mode'
-  ],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode'],
   css: ['~/assets/css/main.css'],
   colorMode: {
     preference: 'system',
@@ -18,16 +15,16 @@ export default defineNuxtConfig({
     componentName: 'ColorScheme',
     classPrefix: '',
     classSuffix: '',
-    storageKey: 'nuxt-color-mode'
+    storageKey: 'nuxt-color-mode',
   },
   runtimeConfig: {
     public: {
-      baseUrl: 'https://sxcongress.ntpusu.org/'
-    }
+      baseUrl: 'https://sxcongress.ntpusu.org/',
+    },
   },
   ssr: true, // 確保開啟 SSR
   nitro: {
-    preset: 'cloudflare-pages'
+    preset: 'cloudflare-pages',
   },
   app: {
     head: {
@@ -35,15 +32,20 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: '國立臺北大學學生自治會三峽校區學生議會議事資訊網站。' }
+        { name: 'description', content: '國立臺北大學學生自治會三峽校區學生議會議事資訊網站。' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/site-icon/favicon.ico' },
-        { rel: 'apple-touch-icon', type: 'image/png', href: '/site-icon/apple-touch-icon.png', 'sizes': '180x180' },
-        { rel: 'icon', type: 'image/png', href: '/site-icon/favicon-32x32.png', 'sizes': '32x32' },
-        { rel: 'icon', type: 'image/png', href: '/site-icon/favicon-16x16.png', 'sizes': '16x16' },
-        { rel: 'manifest', href: '/site-icon/site.webmanifest' }
-      ]
-    }
-  }
-})
+        {
+          rel: 'apple-touch-icon',
+          type: 'image/png',
+          href: '/site-icon/apple-touch-icon.png',
+          sizes: '180x180',
+        },
+        { rel: 'icon', type: 'image/png', href: '/site-icon/favicon-32x32.png', sizes: '32x32' },
+        { rel: 'icon', type: 'image/png', href: '/site-icon/favicon-16x16.png', sizes: '16x16' },
+        { rel: 'manifest', href: '/site-icon/site.webmanifest' },
+      ],
+    },
+  },
+});

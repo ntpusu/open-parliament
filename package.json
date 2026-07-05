@@ -7,7 +7,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
@@ -21,6 +23,7 @@
   "devDependencies": {
     "@types/papaparse": "^5.5.2",
     "nuxi": "^3.25.1",
+    "prettier": "^3.9.4",
     "wrangler": "^4.68.1"
   },
   "packageManager": "pnpm@11.9.0"

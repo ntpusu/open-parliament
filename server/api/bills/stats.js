@@ -19,9 +19,9 @@ export default defineEventHandler(async (event) => {
       data: {
         totalBills: totalBills,
         currentTerm: currentTerm,
-        thisTermBills: thisTermBills
+        thisTermBills: thisTermBills,
       },
-      message: 'Statistics fetched successfully'
+      message: 'Statistics fetched successfully',
     };
   } catch (error) {
     console.error('Error fetching bill statistics:', error);
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch bill statistics',
-      data: null // Or an empty object if preferred
+      data: null, // Or an empty object if preferred
     });
   }
 });

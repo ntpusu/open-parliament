@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   try {
     // 獲取路由參數
     const routeId = getRouterParam(event, 'id');
-    
+
     if (!routeId) {
       throw createError({
         statusCode: 400,
@@ -114,7 +114,6 @@ export default defineEventHandler(async (event) => {
       message: '成功找到議案資料',
       timestamp: new Date().toISOString(),
     };
-
   } catch (error: any) {
     // 如果錯誤已經是 createError 建立的，直接拋出
     if (error.statusCode) {
@@ -140,8 +139,8 @@ export default defineEventHandler(async (event) => {
  */
 function getAvailableTerms(bills: any[]): number[] {
   const terms = new Set<number>();
-  
-  bills.forEach(bill => {
+
+  bills.forEach((bill) => {
     if (bill.編號) {
       const match = bill.編號.match(/(\d+)屆/);
       if (match) {
@@ -149,6 +148,6 @@ function getAvailableTerms(bills: any[]): number[] {
       }
     }
   });
-  
+
   return Array.from(terms).sort((a, b) => a - b);
 }
