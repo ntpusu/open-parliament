@@ -139,6 +139,7 @@ export const useBillService = () => {
 
   return {
     getLatestTermBills,
+    getPastTermBills,
     getLatestTermCachedAt,
     getPastTermsCachedAt,
     getBillsByTerm,
