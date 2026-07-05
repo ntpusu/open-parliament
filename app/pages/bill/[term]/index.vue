@@ -249,6 +249,21 @@
   const normalizeDate = (date) => {
     if (!date) return '';
     if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}/.test(date)) return date;
+
+    // 處理含中文的日期格式: "2025/7/1 下午 11:07:25"
+    if (typeof date === 'string') {
+      const match = date.match(
+        /(\d{4})\/(\d{1,2})\/(\d{1,2})\s*(上午|下午)\s*(\d{1,2}):(\d{2}):(\d{2})/,
+      );
+      if (match) {
+        const [, year, month, day, ampm, hour, min, sec] = match;
+        let h = parseInt(hour, 10);
+        if (ampm === '下午' && h < 12) h += 12;
+        if (ampm === '上午' && h === 12) h = 0;
+        return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(h).padStart(2, '0')}:${min}:${sec}`;
+      }
+    }
+
     const d = new Date(date);
     return isNaN(d.getTime()) ? '' : d.toISOString();
   };
