@@ -94,9 +94,7 @@
           <h3 class="text-lg font-medium text-amber-700 dark:text-amber-300 mb-2">
             第 {{ term }} 屆尚未有任何提案資料
           </h3>
-          <p class="text-amber-600 dark:text-amber-400">
-            請查看其他屆次，或等待資料更新
-          </p>
+          <p class="text-amber-600 dark:text-amber-400">請查看其他屆次，或等待資料更新</p>
         </template>
         <template v-else>
           <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">找不到相關議案</h3>
@@ -200,7 +198,8 @@
         const dateA = normalizeDate(a.submittedAt);
         const dateB = normalizeDate(b.submittedAt);
         if (!dateA || !dateB) return 0;
-        return String(dateB).localeCompare(String(dateA));
+        // 提案時間近→遠：日期較新的排前面
+        return new Date(dateB).getTime() - new Date(dateA).getTime();
       });
   });
 
