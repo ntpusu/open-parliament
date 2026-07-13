@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
     // 若最新屆議案不足 limit 筆，從 past 補足
     if (results.length < limit) {
       const pastBills = await billService.getPastTermBills();
-      const combined = [...results, ...pastBills];
+      const combined = [...pastBills, ...results];
       // 時間戳記最新的在後面，故 slice 最後 limit 筆，然後 reverse 讓最新的在前面
       results = combined.slice(-limit).reverse();
     } else {
