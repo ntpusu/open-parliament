@@ -154,7 +154,7 @@ export function useSecretariat() {
               `<p>案由：${escapeHtml(bill.subject)}</p>`,
               `<p>說明：<br />${toHtmlLineBreaks(bill.description)}</p>`,
               `<p>辦法：${escapeHtml(bill.proposedAction)}</p>`,
-              `<p>附件：詳見<a href="https://ntpu-parliament.pages.dev/bill/${bill.term}/${bill.serialNumber}" target="_blank" title="在新分頁開啟${bill.term}屆北大峽議字第${bill.serialNumber}號提案的詳細資料" rel="noopener">已提案件查詢系統</a></p>`,
+              `<p>附件：詳見<a href="https://ntpu-parliament.pages.dev/bill/${bill.term}/${bill.serialNumber}" target="_blank" title="在新分頁開啟${bill.term}屆北大峽議字第${bill.serialNumber}號提案的詳細資料" rel="noopener" class="ntpusu-link-u">已提案件查詢系統</a></p>`,
               `<p>決議：<br />　一、經提案者說明、本會議員詢答完畢。<br />　二、議員提案包裹表決，議員附議，通過。<br />　三、全案，同意票票，不同意票0票，通過。</p>`,
             ].join('\n\n') + '\n\n'
           );
