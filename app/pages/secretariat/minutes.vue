@@ -12,7 +12,7 @@
   const { bills, currentTerm, isLoading, error, generateMinutes, fetchBills } = useSecretariat();
 
   const billOrderInput = ref(''); // 用於輸入議案順序的字串
-  const generatedMinutes = ref(''); // 顯示生成的會議紀錄 Markdown 文字
+  const generatedMinutes = ref(''); // 顯示生成的會議紀錄 HTML 原始碼
 
   // 當議案資料或輸入順序改變時，重新生成會議紀錄
   watch(
@@ -60,8 +60,11 @@
 
       <div class="mb-6">
         <label for="minutesOutput" class="block text-gray-700 text-sm font-bold mb-2">
-          生成的會議紀錄 (Markdown 格式)：
+          生成的會議紀錄 (HTML 原始碼)：
         </label>
+        <p class="text-red-600 font-semibold mb-2">
+          注意：輸出內容已由 Markdown 改為 HTML 原始碼，可直接複製使用；下方「預覽效果」可查看網頁呈現。
+        </p>
         <textarea
           id="minutesOutput"
           rows="20"
@@ -69,6 +72,17 @@
           :value="generatedMinutes"
           class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight bg-gray-50 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         ></textarea>
+      </div>
+
+      <div class="mb-6">
+        <label for="minutesPreview" class="block text-gray-700 text-sm font-bold mb-2">
+          預覽效果：
+        </label>
+        <div
+          id="minutesPreview"
+          class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight bg-white min-h-[10rem] overflow-auto"
+          v-html="generatedMinutes"
+        ></div>
       </div>
 
       <div class="flex justify-between items-center">

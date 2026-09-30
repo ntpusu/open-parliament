@@ -17,6 +17,29 @@ function toChineseNumeral(num: number): string {
   return num.toString();
 }
 
+/**
+ * 將文字中的 HTML 特殊字元轉義，避免破壞輸出的 HTML 結構。
+ * @param text 原始文字
+ * @returns 轉義後的文字
+ */
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * 將文字中的換行轉換為 HTML 的 <br> 標籤。
+ * @param text 原始文字
+ * @returns 以 <br> 分隔的文字
+ */
+function toHtmlLineBreaks(text: string): string {
+  return escapeHtml(text).replace(/\r?\n/g, '<br>');
+}
+
 export function useSecretariat() {
   const currentTerm = getCurrentTerm();
   const bills = ref<Bill[]>([]); // 儲存從 API 獲取的議案資料
@@ -88,17 +111,17 @@ export function useSecretariat() {
         if (bill) {
           return (
             [
-              `### 第${toChineseNumeral(index + 1)}案`,
-              `編號：${bill.term}屆北大峽議字第${bill.serialNumber}號`,
-              `案由：${bill.subject}`,
-              `說明：\n${bill.description}`,
-              `辦法：${bill.proposedAction}`,
-              `附件：詳見[已提案件查詢系統](https://sxcongress.ntpusu.org/bill/${bill.term}/${bill.serialNumber})`,
-              `決議：\n　一、提案機關說明及經本會議員詢答完畢。\n　二、議員提案包裹表決，議員附議，通過。\n　三、全案，同意票票，不同意票票，通過。`,
+              `<h4 class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</h4>`,
+              `<p>編號：${bill.term}屆北大峽議字第${bill.serialNumber}號</p>`,
+              `<p>案由：${escapeHtml(bill.subject)}</p>`,
+              `<p>說明：<br>${toHtmlLineBreaks(bill.description)}</p>`,
+              `<p>辦法：${escapeHtml(bill.proposedAction)}</p>`,
+              `<p>附件：詳見<a href="https://ntpu-parliament.pages.dev/bill/${bill.term}/${bill.serialNumber}">已提案件查詢系統</a></p>`,
+              `<p>決議：<br>　一、提案機關說明及經本會議員詢答完畢。<br>　二、議員提案包裹表決，議員附議，通過。<br>　三、全案，同意票票，不同意票票，通過。</p>`,
             ].join('\n\n') + '\n\n'
           );
         }
-        return `## 第${toChineseNumeral(index + 1)}案\n\n無法找到${currentTerm}屆北大峽議字第${num}號議案的資料。\n\n`;
+        return `<h4 class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</h4>\n\n<p>無法找到${currentTerm}屆北大峽議字第${num}號議案的資料。</p>\n\n`;
       })
       .join('');
   };
