@@ -81,22 +81,59 @@ export function useSecretariat() {
     { immediate: true },
   );
 
-  const generateAgenda = (orderString: string): string => {
-    if (!orderString || !bills.value.length)
-      return '請輸入有效的議案編號順序，並確保已載入議案資料。';
-    return (
-      orderString
+  const generateAgenda = (reportItems: string, discussionItems: string): string => {
+    if (!bills.value.length) return '請確保已載入議案資料。';
+
+    // 產生「（一）（二）…」形式的議程項目。
+    // allowPlainText 為 true 時，非編號的輸入會被當作純文字直接輸出（並做 HTML 轉義）。
+    const buildItems = (input: string, allowPlainText: boolean): string[] => {
+      const items: string[] = [];
+      let index = 0;
+
+      input
         .split(',')
-        .map((s) => parseInt(s.trim(), 10))
-        .filter((n) => !isNaN(n))
-        .map((num, index) => {
-          const bill = bills.value.find((b) => b.serialNumber === num);
-          return bill
-            ? `（${toChineseNumeral(index + 1)}）審查${bill.term}屆北大峽議字第${bill.serialNumber}號【${bill.subject}】。`
-            : `（${toChineseNumeral(index + 1)}）無法找到${currentTerm}屆北大峽議字第${num}號議案。`;
-        })
-        .join('\n') + '\n'
-    );
+        .map((token) => token.trim())
+        .filter((token) => token.length > 0)
+        .forEach((token) => {
+          const isSerialNumber = /^\d+$/.test(token);
+          // 討論事項只接受編號，非編號的內容直接略過。
+          if (!isSerialNumber && !allowPlainText) return;
+
+          index += 1;
+          const numeral = toChineseNumeral(index);
+
+          if (isSerialNumber) {
+            const num = parseInt(token, 10);
+            const bill = bills.value.find((b) => b.serialNumber === num);
+            items.push(
+              bill
+                ? `（${numeral}）審查${bill.term}屆北大峽議字第${bill.serialNumber}號【${bill.subject}】。`
+                : `（${numeral}）無法找到${currentTerm}屆北大峽議字第${num}號議案。`,
+            );
+          } else {
+            items.push(`（${numeral}）${escapeHtml(token)}`);
+          }
+        });
+
+      return items;
+    };
+
+    const reportItemLines = buildItems(reportItems, true);
+    const discussionItemLines = buildItems(discussionItems, false);
+
+    return [
+      '一、開會。',
+      '二、主席致詞。',
+      '三、確認議程。',
+      '四、報告事項：',
+      ...reportItemLines,
+      '',
+      '五、討論事項：',
+      ...discussionItemLines,
+      '六、會務質詢。',
+      '七、臨時動議。',
+      '八、散會。',
+    ].join('\n');
   };
 
   const generateMinutes = (orderString: string): string => {

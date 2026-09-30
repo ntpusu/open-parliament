@@ -10,13 +10,14 @@
 
   const { bills, currentTerm, isLoading, error, generateAgenda, fetchBills } = useSecretariat();
 
-  const billOrderInput = ref('');
+  const reportItemsInput = ref(''); // 報告事項：可輸入議案編號或純文字
+  const discussionItemsInput = ref(''); // 討論事項：輸入議案編號
   const generatedAgenda = ref('');
 
   watch(
-    [billOrderInput, bills],
+    [reportItemsInput, discussionItemsInput, bills],
     () => {
-      generatedAgenda.value = generateAgenda(billOrderInput.value);
+      generatedAgenda.value = generateAgenda(reportItemsInput.value, discussionItemsInput.value);
     },
     { immediate: true },
   );
@@ -55,13 +56,29 @@
       </ClientOnly>
 
       <div class="mb-6">
-        <label for="billOrder" class="block text-gray-700 text-sm font-bold mb-2">
-          請依排定順序，輸入各議案的編號 (例如: 1, 2, 4, 3):
+        <label for="reportItems" class="block text-gray-700 text-sm font-bold mb-2">
+          報告事項：
         </label>
         <input
           type="text"
-          id="billOrder"
-          v-model="billOrderInput"
+          id="reportItems"
+          v-model="reportItemsInput"
+          class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="請輸入議案編號，以半形逗號分隔"
+        />
+        <p class="text-gray-500 text-sm mt-1">
+          此欄位可輸入議案編號，也可直接輸入純文字（例如：「會長報告本次校務會議擬議各案」）。
+        </p>
+      </div>
+
+      <div class="mb-6">
+        <label for="discussionItems" class="block text-gray-700 text-sm font-bold mb-2">
+          討論事項：
+        </label>
+        <input
+          type="text"
+          id="discussionItems"
+          v-model="discussionItemsInput"
           class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="請輸入議案編號，以半形逗號分隔"
         />
@@ -88,7 +105,7 @@
           返回草擬輔助系統首頁
         </NuxtLink>
         <button
-          @click="billOrderInput = ''"
+          @click="reportItemsInput = ''; discussionItemsInput = ''"
           class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md"
         >
           清除
