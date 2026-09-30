@@ -149,17 +149,17 @@ export function useSecretariat() {
         if (bill) {
           return (
             [
-              `<h4 class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</h4>`,
+              `<h4><span class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</span></h4>`,
               `<p>編號：${bill.term}屆北大峽議字第${bill.serialNumber}號</p>`,
               `<p>案由：${escapeHtml(bill.subject)}</p>`,
-              `<p>說明：<br>${toHtmlLineBreaks(bill.description)}</p>`,
+              `<p>說明：<br />${toHtmlLineBreaks(bill.description)}</p>`,
               `<p>辦法：${escapeHtml(bill.proposedAction)}</p>`,
-              `<p>附件：詳見<a href="https://ntpu-parliament.pages.dev/bill/${bill.term}/${bill.serialNumber}">已提案件查詢系統</a></p>`,
+              `<p>附件：詳見<a href="https://ntpu-parliament.pages.dev/bill/${bill.term}/${bill.serialNumber}" target="_blank" title="在新分頁開啟${bill.term}屆北大峽議字第${bill.serialNumber}號提案的詳細資料" rel="noopener">已提案件查詢系統</a></p>`,
               `<p>決議：<br />　一、經提案者說明、本會議員詢答完畢。<br />　二、議員提案包裹表決，議員附議，通過。<br />　三、全案，同意票票，不同意票0票，通過。</p>`,
             ].join('\n\n') + '\n\n'
           );
         }
-        return `<h4 class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</h4>\n\n<p>無法找到${currentTerm}屆北大峽議字第${num}號議案的資料。</p>\n\n`;
+        return `<h4><span class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</h4>\n\n<p>無法找到${currentTerm}屆北大峽議字第${num}號議案的資料。</span></p>\n\n`;
       })
       .join('');
   };
