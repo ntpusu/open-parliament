@@ -86,7 +86,8 @@ export function useSecretariat() {
 
     // 產生「（一）（二）…」形式的議程項目。
     // allowPlainText 為 true 時，非編號的輸入會被當作純文字直接輸出（並做 HTML 轉義）。
-    const buildItems = (input: string, allowPlainText: boolean): string[] => {
+    // billPrefix 為議案項目的開頭動詞（報告事項與討論事項用字不同）。
+    const buildItems = (input: string, allowPlainText: boolean, billPrefix: string): string[] => {
       const items: string[] = [];
       let index = 0;
 
@@ -107,7 +108,7 @@ export function useSecretariat() {
             const bill = bills.value.find((b) => b.serialNumber === num);
             items.push(
               bill
-                ? `（${numeral}）審查${bill.term}屆北大峽議字第${bill.serialNumber}號【${bill.subject}】。`
+                ? `（${numeral}）${billPrefix}${bill.term}屆北大峽議字第${bill.serialNumber}號【${bill.subject}】。`
                 : `（${numeral}）無法找到${currentTerm}屆北大峽議字第${num}號議案。`,
             );
           } else {
@@ -118,8 +119,8 @@ export function useSecretariat() {
       return items;
     };
 
-    const reportItemLines = buildItems(reportItems, true);
-    const discussionItemLines = buildItems(discussionItems, false);
+    const reportItemLines = buildItems(reportItems, true, '聽取○○報告');
+    const discussionItemLines = buildItems(discussionItems, false, '審查');
 
     return [
       '一、開會。',
