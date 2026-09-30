@@ -12,7 +12,7 @@
     class="min-h-screen bg-gray-100 dark:bg-gray-700 flex flex-col items-center justify-center p-4 font-inter"
   >
     <div class="bg-white dark:bg-gray-100 p-8 rounded-lg shadow-xl w-full max-w-md text-center">
-      <h1 class="text-3xl font-bold text-gray-800 mb-6">議事文件草擬輔助系統</h1>
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">議事文書草擬輔助系統</h1>
       <p class="text-gray-600 mb-8">請選擇您要執行的功能：</p>
 
       <div class="grid grid-cols-1 gap-6">

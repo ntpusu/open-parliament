@@ -47,14 +47,14 @@
 
       <div class="mb-6">
         <label for="billOrder" class="block text-gray-700 text-sm font-bold mb-2">
-          輸入議案編號順序 (例如: 1, 2, 4, 3):
+          請依排定順序，輸入各議案的編號 (例如: 1, 2, 4, 3):
         </label>
         <input
           type="text"
           id="billOrder"
           v-model="billOrderInput"
           class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="請輸入議案編號，以逗號分隔"
+          placeholder="請輸入議案編號，以半形逗號分隔"
         />
       </div>
 
@@ -90,7 +90,7 @@
           to="/secretariat"
           class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md"
         >
-          返回秘書處首頁
+          返回草擬輔助系統首頁
         </NuxtLink>
         <button
           @click="billOrderInput = ''"
