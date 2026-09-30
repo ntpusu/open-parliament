@@ -2,7 +2,7 @@
 export const SITE_CONFIG = {
   name: '北大三峽議事資訊',
   fullName: '國立臺北大學三峽校區學生議會',
-  englishName: 'NTPU Student Congress (Sanxia Campus)',
+  englishName: 'NTPU Student Parliament (Sanxia Campus)',
   domain: 'sxcongress.ntpusu.org',
   email: 'ntpuscs@gm.ntpu.edu.tw',
   githubRepo: 'https://github.com/ntpusu/open-parliament',
@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
 export const ORG_DATA = {
   nameZhFull: '國立臺北大學三峽校區學生議會',
   nameZhShort: '北大三峽議會',
-  nameEnFull: 'NTPU Student Congress (Sanxia Campus)',
+  nameEnFull: 'NTPU Student Parliament (Sanxia Campus)',
   nameEnShort: 'NTPUSCS',
   email: 'ntpuscs@gmail.com',
   office: '商學大樓 B1F08 室',
