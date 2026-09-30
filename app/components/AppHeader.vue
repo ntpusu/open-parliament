@@ -32,12 +32,6 @@
             議案查詢
           </NuxtLink>
           <NuxtLink
-            to="/committee-reports"
-            class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors"
-          >
-            委員會報告
-          </NuxtLink>
-          <NuxtLink
             to="/secretariat"
             class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors"
           >
