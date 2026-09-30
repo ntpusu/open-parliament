@@ -79,7 +79,7 @@
 
 <script setup>
   import { computed } from 'vue'; // 確保引入 computed
-  import { getCurrentTerm, getValidTerms, getEarliestTerm } from '../../../shared/utils/term';
+  import { getCurrentTerm, getValidTerms, getEarliestTerm } from '~~/shared/utils/term';
 
   const { data: newestBills, pending, error } = await useFetch(`/api/bills?limit=10`);
 

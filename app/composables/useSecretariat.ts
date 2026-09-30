@@ -1,8 +1,8 @@
 // composables/useSecretariat.ts
 import { ref, watch } from 'vue';
 import { useAsyncData } from '#app';
-import { getCurrentTerm } from '../../shared/utils/term';
-import type { Bill } from '../../shared/types/bill';
+import { getCurrentTerm } from '~~/shared/utils/term';
+import type { Bill } from '~~/shared/types/bill';
 
 /**
  * 將阿拉伯數字轉換為中文數字

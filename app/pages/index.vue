@@ -212,7 +212,7 @@
     }
   });
 
-  import { getCurrentTerm } from '../../shared/utils/term.js';
+  import { getCurrentTerm } from '~~/shared/utils/term.js';
 
   import { EXTERNAL_LINKS, SITE_CONFIG } from '~/utils/constants.js';
 </script>

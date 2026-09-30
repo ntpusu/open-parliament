@@ -1,6 +1,6 @@
 // server/utils/billService.ts
-import type { Bill, BillResponse } from '../../shared/types/bill';
-import { getCurrentTerm, isCurrentTermBills } from '../../shared/utils/term';
+import type { Bill, BillResponse } from '~~/shared/types/bill';
+import { getCurrentTerm, isCurrentTermBills } from '~~/shared/utils/term';
 
 export const useBillService = () => {
   const CDN_BASE_URL = 'https://cdn.jsdelivr.net/gh/ntpusu/legislative-data@main/data';
