@@ -12,12 +12,17 @@
 
   const reportItemsInput = ref(''); // 報告事項：可輸入議案編號或純文字
   const discussionItemsInput = ref(''); // 討論事項：輸入議案編號
+  const includeChairAddress = ref(true); // 是否列入主席致詞，預設列入
   const generatedAgenda = ref('');
 
   watch(
-    [reportItemsInput, discussionItemsInput, bills],
+    [reportItemsInput, discussionItemsInput, includeChairAddress, bills],
     () => {
-      generatedAgenda.value = generateAgenda(reportItemsInput.value, discussionItemsInput.value);
+      generatedAgenda.value = generateAgenda(
+        reportItemsInput.value,
+        discussionItemsInput.value,
+        includeChairAddress.value,
+      );
     },
     { immediate: true },
   );
@@ -54,6 +59,21 @@
           <div class="text-center text-blue-500 mb-4">載入議案資料中...</div>
         </template>
       </ClientOnly>
+
+      <div class="mb-6">
+        <label for="includeChairAddress" class="inline-flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            id="includeChairAddress"
+            v-model="includeChairAddress"
+            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+          />
+          <span class="text-gray-700 text-sm font-bold">列入主席致詞</span>
+        </label>
+        <p class="text-gray-500 text-sm mt-1">
+          取消勾選時，議程不列「主席致詞」一項，其後各項編號依序往上遞補。
+        </p>
+      </div>
 
       <div class="mb-6">
         <label for="reportItems" class="block text-gray-700 text-sm font-bold mb-2">
