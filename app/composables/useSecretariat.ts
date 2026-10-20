@@ -81,7 +81,18 @@ export function useSecretariat() {
     { immediate: true },
   );
 
-  const generateAgenda = (reportItems: string, discussionItems: string): string => {
+  /**
+   * 生成議程文字。
+   * @param reportItems 報告事項輸入（議案編號或純文字，以半形逗號分隔）
+   * @param discussionItems 討論事項輸入（議案編號，以半形逗號分隔）
+   * @param includeChairAddress 是否列入「主席致詞」；為 false 時略去該項，其後各項編號往上遞補
+   * @returns 議程文字
+   */
+  const generateAgenda = (
+    reportItems: string,
+    discussionItems: string,
+    includeChairAddress = true,
+  ): string => {
     if (!bills.value.length) return '請確保已載入議案資料。';
 
     // 產生「（一）（二）…」形式的議程項目。
@@ -122,19 +133,27 @@ export function useSecretariat() {
     const reportItemLines = buildItems(reportItems, true, '聽取○○報告');
     const discussionItemLines = buildItems(discussionItems, false, '審查');
 
-    return [
-      '一、開會。',
-      '二、主席致詞。',
-      '三、確認議程。',
-      '四、報告事項：',
-      ...reportItemLines,
-      '五、問答時段。',
-      '六、討論事項：',
-      ...discussionItemLines,
-      '七、會務質詢。',
-      '八、臨時動議。',
-      '九、散會。',
-    ].join('\n');
+    // 議程各大項；subItems 為該項之下的（一）（二）…子項目。
+    // 大項編號（一、二、…）於組合時依實際列入的項目動態產生，
+    // 故略去某一項時，其後各項編號會自動往上遞補。
+    const sections: { title: string; subItems?: string[] }[] = [
+      { title: '開會。' },
+      ...(includeChairAddress ? [{ title: '主席致詞。' }] : []),
+      { title: '確認議程。' },
+      { title: '報告事項：', subItems: reportItemLines },
+      { title: '問答時段。' },
+      { title: '討論事項：', subItems: discussionItemLines },
+      { title: '會務質詢。' },
+      { title: '臨時動議。' },
+      { title: '散會。' },
+    ];
+
+    return sections
+      .flatMap(({ title, subItems = [] }, index) => [
+        `${toChineseNumeral(index + 1)}、${title}`,
+        ...subItems,
+      ])
+      .join('\n');
   };
 
   const generateMinutes = (orderString: string): string => {
