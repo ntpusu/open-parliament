@@ -5,8 +5,6 @@
         ? `/bill/${bill.term}/${bill.serialNumber}`
         : `/bill/unnumbered/${bill.rowIndex}`
     "
-    target="_blank"
-    rel="noopener"
   >
     <div
       class="bill-card bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
