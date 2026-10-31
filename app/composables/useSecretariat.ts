@@ -179,7 +179,7 @@ export function useSecretariat() {
             ].join('\n\n') + '\n\n'
           );
         }
-        return `<h4><span class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</h4>\n\n<p>無法找到${currentTerm}屆北大峽議字第${num}號議案的資料。</span></p>\n\n`;
+        return `<h4><span class="as-proposal-serial-number">第${toChineseNumeral(index + 1)}案</span></h4>\n\n<p>無法找到${currentTerm}屆北大峽議字第${num}號議案的資料。</p>\n\n`;
       })
       .join('');
   };
