@@ -112,12 +112,16 @@
                     </div>
                   </div>
                   <div
-                    v-else-if="field.isMultiline && field.key === 'description'"
-                    class="whitespace-pre-wrap"
+                    v-else-if="field.key === 'description'" class="whitespace-pre-wrap"
                   >
-                    <span
-                      v-html="formatIndentedDescription(String(getField(field.key) ?? ''))"
-                    ></span>
+                    <p
+                      v-for="(line, i) in descriptionLines"
+                      :key="i"
+                      :style="line.hanging ? { textIndent: '-2em', marginLeft: '2em' } : undefined"
+                    >
+                      {{ line.text }}
+                    </p>
+                    <template v-if="!descriptionLines.length">無</template>
                   </div>
                   <div v-else-if="field.isMultiline" class="whitespace-pre-wrap">
                     {{ getField(field.key) || '無' }}
@@ -268,21 +272,14 @@
     return (bill.value as unknown as Record<string, unknown>)[fieldName];
   };
 
-  // 說明欄位：偵測每行是否以「一、」等開頭，若是則凸排兩全形字元
-  function formatIndentedDescription(desc: string) {
-    if (!desc) return '無';
-    const cjkNums = '一二三四五六七八九十';
-    return desc
-      .split('\n')
-      .map((line: string) => {
-        if (line.match(new RegExp(`^[${cjkNums}]、`))) {
-          // 使用 <p> 並套用 text-indent 與 margin-left
-          return `<p style="text-indent: -2em; margin-left: 2em;">${line}</p>`;
-        }
-        return `<p>${line}</p>`;
-      })
-      .join('');
-  }
+  // 說明欄位：以「一、」「十一、」等開頭的行使用凸排
+  const HANGING_LINE = /^[一二三四五六七八九十]+、/;
+
+  const descriptionLines = computed(() => {
+    const raw = String(bill.value?.description ?? '');
+    if (!raw) return [];
+    return raw.split(/\r?\n/).map((text) => ({ text, hanging: HANGING_LINE.test(text) }));
+  });
 
   // 附件欄位：各附件編號、嘗試解析檔名或 Google Drive
   const getAttachments = (billData: Bill | null | undefined) => {
