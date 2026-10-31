@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@headlessui/vue':
-        specifier: ^1.7.23
-        version: 1.7.23(vue@3.5.29)
       '@heroicons/vue':
         specifier: ^2.2.0
         version: 2.2.0(vue@3.5.29)
@@ -30,9 +27,6 @@ importers:
         specifier: ^4.5.1
         version: 4.6.4(vue@3.5.29)
     devDependencies:
-      '@types/papaparse':
-        specifier: ^5.5.2
-        version: 5.5.2
       nuxi:
         specifier: ^3.25.1
         version: 3.33.1
@@ -594,12 +588,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@headlessui/vue@1.7.23':
-    resolution: {integrity: sha512-JzdCNqurrtuu0YW6QaDtR2PIYCKPUWq28csDyMvN4zmGccmE7lz40Is6hc3LA4HFeCI7sekZ/PQMTNmn9I/4Wg==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      vue: ^3.2.0
 
   '@heroicons/vue@2.2.0':
     resolution: {integrity: sha512-G3dbSxoeEKqbi/DFalhRxJU4mTXJn7GwZ7ae8NuEQzd1bqdd0jAbdaBZlHPcvPD2xI1iGzNVB4k20Un2AguYPw==}
@@ -1406,14 +1394,6 @@ packages:
   '@speed-highlight/core@1.2.24':
     resolution: {integrity: sha512-qeW2e1l78afw8VhRPfPQ1Gjj+KU5XFQ/OFV5ti6eTa9bruO7mJyZtA4vw0ofqmA3tKCkROE9xLk3VZoeRc98nw==}
 
-  '@tanstack/virtual-core@3.13.19':
-    resolution: {integrity: sha512-/BMP7kNhzKOd7wnDeB8NrIRNLwkf5AhCYCvtfZV2GXWbBieFm/el0n6LOAXlTi6ZwHICSNnQcIxRCWHrLzDY+g==}
-
-  '@tanstack/vue-virtual@3.13.19':
-    resolution: {integrity: sha512-07Fp1TYuIziB4zIDA/moeDKHODePy3K1fN4c4VIAGnkxo1+uOvBJP7m54CoxKiQX6Q9a1dZnznrwOg9C86yvvA==}
-    peerDependencies:
-      vue: ^2.7.0 || ^3.0.0
-
   '@types/estree@1.0.10':
     resolution: {integrity: sha512-lTyOMnOcmRBzdCv6/4zUZCrEhV0xrqQiUZBZtVcbmLHBXKLnN8q89v/wKRF/Q0HbwVsqbIG3o5HDoFl9sduM+g==}
 
@@ -1422,9 +1402,6 @@ packages:
 
   '@types/node@25.3.2':
     resolution: {integrity: sha512-RpV6r/ij22zRRdyBPcxDeKAzH43phWVKEjL2iksqo1Vz3CuBUrgmPpPhALKiRfU7OMCmeeO9vECBMsV0hMTG8Q==}
-
-  '@types/papaparse@5.5.2':
-    resolution: {integrity: sha512-gFnFp/JMzLHCwRf7tQHrNnfhN4eYBVYYI897CGX4MY1tzY9l2aLkVyx2IlKZ/SAqDbB3I1AOZW5gTMGGsqWliA==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -4647,11 +4624,6 @@ snapshots:
   '@esbuild/win32-x64@0.28.2':
     optional: true
 
-  '@headlessui/vue@1.7.23(vue@3.5.29)':
-    dependencies:
-      '@tanstack/vue-virtual': 3.13.19(vue@3.5.29)
-      vue: 3.5.29
-
   '@heroicons/vue@2.2.0(vue@3.5.29)':
     dependencies:
       vue: 3.5.29
@@ -5548,13 +5520,6 @@ snapshots:
 
   '@speed-highlight/core@1.2.24': {}
 
-  '@tanstack/virtual-core@3.13.19': {}
-
-  '@tanstack/vue-virtual@3.13.19(vue@3.5.29)':
-    dependencies:
-      '@tanstack/virtual-core': 3.13.19
-      vue: 3.5.29
-
   '@types/estree@1.0.10': {}
 
   '@types/estree@1.0.9': {}
@@ -5562,10 +5527,7 @@ snapshots:
   '@types/node@25.3.2':
     dependencies:
       undici-types: 7.18.2
-
-  '@types/papaparse@5.5.2':
-    dependencies:
-      '@types/node': 25.3.2
+    optional: true
 
   '@types/resolve@1.20.2': {}
 
@@ -8166,7 +8128,8 @@ snapshots:
       rolldown: 1.2.16
       unplugin: 3.7.0(esbuild@0.28.2)(rolldown@1.2.16)(rollup@4.67.2)(vite@8.3.5(@types/node@25.3.2)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))
 
-  undici-types@7.18.2: {}
+  undici-types@7.18.2:
+    optional: true
 
   undici@7.18.2: {}
 
