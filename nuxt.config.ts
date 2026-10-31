@@ -29,15 +29,10 @@ export default defineNuxtConfig({
         { name: 'description', content: `${SITE_CONFIG.fullName}議事資訊網站` },
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/site-icon/favicon.ico' },
-        {
-          rel: 'apple-touch-icon',
-          type: 'image/png',
-          href: '/site-icon/apple-touch-icon.png',
-          sizes: '180x180',
-        },
-        { rel: 'icon', type: 'image/png', href: '/site-icon/favicon-32x32.png', sizes: '32x32' },
-        { rel: 'icon', type: 'image/png', href: '/site-icon/favicon-16x16.png', sizes: '16x16' },
+        // 不支援 SVG 的瀏覽器使用 favicon.ico；其餘使用可隨深色主題調色的 favicon.svg
+        { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/site-icon/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site-icon/site.webmanifest' },
       ],
     },

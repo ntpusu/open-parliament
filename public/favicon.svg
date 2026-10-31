@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-9.55 0 79.5 79.5">
+  <!-- 學生議會標誌的 favicon 版本：正方形畫布、門框線加粗以便在 16px 仍清楚；深色主題時調亮 -->
+  <style>
+    .main { fill: #5A6C87; }
+    .frame { stroke: #344A69; }
+    @media (prefers-color-scheme: dark) {
+      .main { fill: #6B7D99; }
+      .frame { stroke: #CBD5E1; }
+    }
+  </style>
+  <polygon points="0.77,19.84 26.05,21.31 26.05,69.6 0.77,77.24" fill="#929EB3"/>
+  <polygon class="main" points="21.41,4.53 51.19,0.63 51.19,60.47 21.41,59.54"/>
+  <polygon class="frame" points="35.65,29.27 59.13,28.17 59.13,78.26 35.65,70.34" fill="none" stroke-width="4" stroke-linejoin="miter"/>
+</svg>
