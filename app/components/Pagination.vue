@@ -63,7 +63,10 @@
           </button>
 
           <!-- 頁碼按鈕 -->
-          <template v-for="page in displayPages" :key="page">
+          <template
+            v-for="(page, index) in displayPages"
+            :key="page === '...' ? `ellipsis-${index}` : page"
+          >
             <button
               v-if="page !== '...'"
               @click="goToPage(page)"
