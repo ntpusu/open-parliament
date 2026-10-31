@@ -41,125 +41,134 @@
     </div>
 
     <div v-if="status !== 'pending' && !error && bill" class="space-y-6">
-      <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 print:hidden"
-      >
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          {{ bill.billNumber }}
-        </h1>
-        <p class="text-lg text-gray-700 dark:text-gray-300">{{ bill.subject }}</p>
-      </div>
+      <!-- ===== 螢幕版 ===== -->
+      <div class="space-y-6 print:hidden">
+        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+          <span
+            v-if="bill.billType"
+            class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+          >
+            {{ bill.billType }}
+          </span>
+          <h1 class="mt-3 text-2xl font-bold text-gray-900 dark:text-white">{{ bill.billNumber }}</h1>
+          <p class="mt-2 text-lg text-gray-700 dark:text-gray-300">{{ bill.subject }}</p>
 
-      <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
-      >
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 print:hidden">
-          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">詳細資料</h2>
+          <dl class="mt-5 grid gap-x-8 gap-y-3 border-t border-gray-100 pt-4 text-sm dark:border-gray-700 sm:grid-cols-2">
+            <div>
+              <dt class="text-gray-500 dark:text-gray-400">提案者</dt>
+              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ proposerText || '無' }}</dd>
+            </div>
+            <div>
+              <dt class="text-gray-500 dark:text-gray-400">提案時間</dt>
+              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ bill.submittedAt || '無' }}</dd>
+            </div>
+            <div v-if="bill.scheduledSession">
+              <dt class="text-gray-500 dark:text-gray-400">排入會議</dt>
+              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ bill.scheduledSession }}</dd>
+            </div>
+          </dl>
         </div>
-        <div>
-          <table class="w-full">
-            <tbody>
-              <tr
-                v-for="(field, index) in displayFields"
-                :key="index"
-                class="block sm:table-row border-b sm:border-0 last:border-b-0"
+
+        <section class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
+          <div class="p-6">
+            <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400">說明</h2>
+            <div class="mt-2 whitespace-pre-wrap leading-relaxed text-gray-800 dark:text-gray-200">
+              <p
+                v-for="(line, i) in descriptionLines"
+                :key="i"
+                :style="line.hanging ? { textIndent: '-2em', marginLeft: '2em' } : undefined"
               >
-                <td
-                  class="block sm:table-cell px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700/50 w-full sm:w-1/4 border-b-0 sm:border-b"
-                >
-                  {{ field.label }}
-                </td>
-                <td
-                  class="block sm:table-cell px-6 py-4 text-sm text-gray-700 dark:text-gray-300 border-b-0 sm:border-b"
-                >
-                  <div v-if="field.key === 'attachments'" class="space-y-2">
-                    <!-- 非列印模式：顯示連結 -->
-                    <div v-if="!isPrintMedia" class="print:hidden">
-                      <div
-                        v-for="(attachment, attachIndex) in getAttachments(bill)"
-                        :key="attachIndex"
-                      >
-                        <a
-                          v-if="attachment.url"
-                          :href="attachment.url"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="inline-flex items-center text-primary-400 hover:text-primary-600 dark:hover:text-white hover:underline"
-                        >
-                          <DocumentIcon class="h-4 w-4 mr-1" />
-                          {{ attachment.name }}
-                          <ArrowTopRightOnSquareIcon class="h-3 w-3 ml-1" />
-                        </a>
-                      </div>
-                      <div
-                        v-if="bill.attachments.length === 0"
-                        class="text-gray-500 dark:text-gray-400"
-                      >
-                        無附件
-                      </div>
-                    </div>
-                    <!-- 列印模式：顯示純文字 -->
-                    <div class="hidden print:block break-all">
-                      <div
-                        v-for="(attachment, attachIndex) in getAttachments(bill)"
-                        :key="attachIndex"
-                      >
-                        <span style="text-indent: -1em; margin-left: 1em; display: block">
-                          附件 {{ attachIndex + 1 }}：{{ attachment.url }}
-                        </span>
-                      </div>
-                      <div v-if="bill.attachments.length === 0" class="text-gray-500">無附件</div>
-                    </div>
-                  </div>
-                  <div
-                    v-else-if="field.key === 'description'" class="whitespace-pre-wrap"
-                  >
-                    <p
-                      v-for="(line, i) in descriptionLines"
-                      :key="i"
-                      :style="line.hanging ? { textIndent: '-2em', marginLeft: '2em' } : undefined"
-                    >
-                      {{ line.text }}
-                    </p>
-                    <template v-if="!descriptionLines.length">無</template>
-                  </div>
-                  <div v-else-if="field.isMultiline" class="whitespace-pre-wrap">
-                    {{ getField(field.key) || '無' }}
-                  </div>
-                  <div v-else>
-                    {{ getField(field.key) || '無' }}
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                {{ line.text }}
+              </p>
+              <p v-if="!descriptionLines.length" class="text-gray-500 dark:text-gray-400">無</p>
+            </div>
+          </div>
+          <div class="p-6">
+            <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400">辦法</h2>
+            <p class="mt-2 whitespace-pre-wrap leading-relaxed text-gray-800 dark:text-gray-200">
+              {{ bill.proposedAction || '無' }}
+            </p>
+          </div>
+        </section>
+
+        <section class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+          <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400">附件</h2>
+          <ul v-if="attachments.length" class="mt-3 space-y-2">
+            <li v-for="(attachment, i) in attachments" :key="i">
+              <a
+                :href="attachment.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 text-primary transition-colors hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-gray-700 dark:text-primary-400 dark:hover:bg-gray-700/50"
+              >
+                <DocumentIcon class="h-5 w-5 shrink-0" />
+                <span class="min-w-0 flex-1 break-words">{{ attachment.name }}</span>
+                <ArrowTopRightOnSquareIcon class="h-4 w-4 shrink-0 opacity-60 group-hover:opacity-100" />
+              </a>
+            </li>
+          </ul>
+          <p v-else class="mt-2 text-gray-500 dark:text-gray-400">無附件</p>
+        </section>
       </div>
 
-      <!-- 下排按鈕：列印時隱藏 -->
-      <div class="flex flex-wrap gap-4 print:hidden">
-        <NuxtLink
-          :to="`/bill/${term}`"
-          class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-        >
-          <ChevronLeftIcon class="h-4 w-4 mr-2" />
-          返回議案清單
-        </NuxtLink>
-        <button
-          @click="copyUrl"
-          class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors dark:bg-primary-400 dark:hover:bg-primary-300"
-        >
-          <LinkIcon class="h-4 w-4 mr-2" />
-          複製連結
-        </button>
-        <button
-          @click="printPage"
-          class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors dark:bg-green-700 dark:hover:bg-green-800"
-        >
-          <PrinterIcon class="h-4 w-4 mr-2" />
-          列印
-        </button>
+      <!-- ===== 列印版：維持原本的表格 ===== -->
+      <div class="hidden overflow-hidden rounded-lg border border-gray-200 print:block">
+        <table class="w-full">
+          <tbody>
+            <tr v-for="field in printFields" :key="field.key" class="border-b border-gray-200 last:border-b-0">
+              <td class="w-1/4 whitespace-nowrap px-6 py-4 text-sm font-medium">{{ field.label }}</td>
+              <td class="px-6 py-4 text-sm">
+                <div v-if="field.key === 'attachments'" class="break-all">
+                  <span
+                    v-for="(attachment, i) in attachments"
+                    :key="i"
+                    class="block"
+                    style="text-indent: -1em; margin-left: 1em"
+                  >
+                    附件 {{ i + 1 }}：{{ attachment.url }}
+                  </span>
+                  <span v-if="!attachments.length">無附件</span>
+                </div>
+                <div v-else-if="field.key === 'description'" class="whitespace-pre-wrap">
+                  <p
+                    v-for="(line, i) in descriptionLines"
+                    :key="i"
+                    :style="line.hanging ? { textIndent: '-2em', marginLeft: '2em' } : undefined"
+                  >
+                    {{ line.text }}
+                  </p>
+                  <template v-if="!descriptionLines.length">無</template>
+                </div>
+                <div v-else class="whitespace-pre-wrap">{{ getField(field.key) || '無' }}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <!-- 下排按鈕：列印時隱藏 -->
+            <div class="flex flex-wrap gap-4 print:hidden">
+              <NuxtLink
+                :to="`/bill/${term}`"
+                class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <ChevronLeftIcon class="h-4 w-4 mr-2" />
+                返回議案清單
+              </NuxtLink>
+              <button
+                @click="copyUrl"
+                class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors dark:bg-primary-400 dark:hover:bg-primary-300"
+              >
+                <LinkIcon class="h-4 w-4 mr-2" />
+                複製連結
+              </button>
+              <button
+                @click="printPage"
+                class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors dark:bg-green-700 dark:hover:bg-green-800"
+              >
+                <PrinterIcon class="h-4 w-4 mr-2" />
+                列印
+              </button>
+            </div>
     </div>
 
     <div v-if="!pending && !error && !bill" class="text-center py-12 print:hidden">
@@ -251,20 +260,8 @@
     ],
   }));
 
-  // 定義顯示欄位
-  const displayFields = computed(() => [
-    { label: '編號', key: 'billNumber' },
-    { label: '提案時間', key: 'submittedAt' },
-    { label: '提案者', key: 'proposingEntity' },
-    { label: '類型', key: 'billType' },
-    { label: '案由', key: 'subject', isMultiline: true },
-    { label: '說明', key: 'description', isMultiline: true },
-    { label: '辦法', key: 'proposedAction', isMultiline: true },
-    { label: '附件', key: 'attachments' },
-    { label: '排入會議', key: 'scheduledSession' },
-  ]);
 
-  // helper: 動態欄位取值（搭配 displayFields 的 key）
+  // helper: 動態欄位取值（搭配 printFields 的 key）
   const getField = (fieldName: string): unknown => {
     if (!bill.value) return undefined;
     if (fieldName === 'proposingEntity') return formatProposer(bill.value);
@@ -320,11 +317,21 @@
   // 複製連結功能
   const showCopySuccess = ref(false);
 
-  // 判斷是否為列印媒體，替代 template 中直接存取 window
-  const isPrintMedia = computed(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia?.('print').matches ?? false;
-  });
+  const printFields = computed(() => [
+    { label: '編號', key: 'billNumber' },
+    { label: '提案時間', key: 'submittedAt' },
+    { label: '提案者', key: 'proposingEntity' },
+    { label: '類型', key: 'billType' },
+    { label: '案由', key: 'subject', isMultiline: true },
+    { label: '說明', key: 'description', isMultiline: true },
+    { label: '辦法', key: 'proposedAction', isMultiline: true },
+    { label: '附件', key: 'attachments' },
+    { label: '排入會議', key: 'scheduledSession' },
+  ]);
+
+  const proposerText = computed(() => (bill.value ? formatProposer(bill.value) : ''));
+  const attachments = computed(() => getAttachments(bill.value));
+
   const copyUrl = () => {
     if (typeof window === 'undefined') return;
     const url = window.location.href;
