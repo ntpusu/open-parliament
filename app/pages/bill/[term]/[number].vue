@@ -255,9 +255,7 @@
   const displayFields = computed(() => [
     { label: '編號', key: 'billNumber' },
     { label: '提案時間', key: 'submittedAt' },
-    { label: '提案機關/議員', key: 'proposingEntity' },
-    { label: '機關主管/\n議員姓名', key: 'proposerName' },
-    { label: '聯絡人', key: 'contactName' },
+    { label: '提案者', key: 'proposingEntity' },
     { label: '類型', key: 'billType' },
     { label: '案由', key: 'subject', isMultiline: true },
     { label: '說明', key: 'description', isMultiline: true },
@@ -269,6 +267,7 @@
   // helper: 動態欄位取值（搭配 displayFields 的 key）
   const getField = (fieldName: string): unknown => {
     if (!bill.value) return undefined;
+    if (fieldName === 'proposingEntity') return formatProposer(bill.value);
     return (bill.value as unknown as Record<string, unknown>)[fieldName];
   };
 
