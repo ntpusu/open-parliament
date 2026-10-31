@@ -17,11 +17,6 @@ export default defineNuxtConfig({
     classSuffix: '',
     storageKey: 'nuxt-color-mode',
   },
-  runtimeConfig: {
-    public: {
-      baseUrl: 'https://sxcongress.ntpusu.org/',
-    },
-  },
   ssr: true, // 確保開啟 SSR
   nitro: {
     preset: 'cloudflare-pages',

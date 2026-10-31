@@ -171,8 +171,6 @@
 </template>
 
 <script setup>
-  const config = useRuntimeConfig();
-
   // 設定頁面 meta 標籤
   useHead({
     title: SITE_CONFIG.name,

@@ -6,7 +6,8 @@ export const SITE_CONFIG = {
   name: '北大三峽議事資訊',
   fullName: '國立臺北大學三峽校區學生議會',
   englishName: 'NTPU Student Parliament (Sanxia Campus)',
-  domain: 'sxcongress.ntpusu.org',
+  // 正式網域。未來若取得學校子網域，只需修改此處
+  domain: 'ntpu-parliament.pages.dev',
   email: 'ntpuscs@gm.ntpu.edu.tw',
   githubRepo: 'https://github.com/ntpusu/open-parliament',
 };

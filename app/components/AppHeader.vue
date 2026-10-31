@@ -123,7 +123,6 @@
   import { ref } from 'vue';
   import ThemeToggle from '~/components/ThemeToggle.vue';
 
-  const config = useRuntimeConfig();
   const mobileMenuOpen = ref(false);
 
   const toggleMobileMenu = () => {
