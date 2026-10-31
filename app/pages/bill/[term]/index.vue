@@ -192,8 +192,11 @@
         const billDateISO = normalizeDate(bill.submittedAt);
 
         if (billDateISO) {
-          if (filters.value.dateFrom && billDateISO < filters.value.dateFrom) return false;
-          if (filters.value.dateTo && billDateISO > filters.value.dateTo) return false;
+          // 只比較日期部分：billDateISO 含時間（例如 2026-10-21T23:26:49），
+          // 若直接與「2026-10-21」做字串比較，迄日當天的議案會被排除
+          const billDay = billDateISO.slice(0, 10);
+          if (filters.value.dateFrom && billDay < filters.value.dateFrom) return false;
+          if (filters.value.dateTo && billDay > filters.value.dateTo) return false;
         }
 
         return true;
