@@ -1,14 +1,28 @@
 // shared/utils/term.ts
 
 /**
- * 取得當前（最新）屆次
- * 判斷邏輯：每年 7 月 1 日到隔年 6 月 30 日為一屆。
- * 範例：2025年7月1日～2026年6月30日為第26屆。
+ * 取得某時間點在臺北時區的年與月。
+ * 伺服器（Cloudflare）以 UTC 執行，若直接用 getFullYear()/getMonth()，
+ * 7 月 1 日 00:00–08:00（臺北時間）之間伺服器與瀏覽器會算出不同屆次。
  */
-export const getCurrentTerm = (): number => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1; // getMonth() 回傳 0-11，需加 1
+const getTaipeiYearMonth = (date: Date): { year: number; month: number } => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Taipei',
+    year: 'numeric',
+    month: 'numeric',
+  }).formatToParts(date);
+  const pick = (type: string) => Number(parts.find((part) => part.type === type)?.value);
+  return { year: pick('year'), month: pick('month') };
+};
+
+/**
+ * 取得當前（最新）屆次
+ * 判斷邏輯：每年 7 月 1 日到隔年 6 月 30 日為一屆（以臺北時間為準）。
+ * 範例：2025年7月1日～2026年6月30日為第26屆。
+ * @param now 計算基準時間，預設為現在（主要供測試使用）
+ */
+export const getCurrentTerm = (now: Date = new Date()): number => {
+  const { year, month } = getTaipeiYearMonth(now);
 
   // 如果月份小於 7 (1月~6月)，則屬於「前一年」開始的屆次
   const baseYear = month < 7 ? year - 1 : year;
