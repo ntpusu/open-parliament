@@ -76,7 +76,7 @@
         />
 
         <div class="grid gap-4">
-          <BillCard v-for="bill in paginatedBills" :key="bill.billNumber" :bill="bill" />
+          <BillCard v-for="bill in paginatedBills" :key="bill.rowIndex" :bill="bill" />
         </div>
 
         <!-- 下方分頁選單 -->
