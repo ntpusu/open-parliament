@@ -1,0 +1,38 @@
+# 每次推送到 main 或開 PR（包含 Dependabot 的 PR）時，
+# 以與部署相同的方式安裝、檢查格式並建置，避免壞掉的變更合併後才在部署時失敗。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # 版本取自 package.json 的 packageManager 欄位
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Build
+        run: pnpm build
