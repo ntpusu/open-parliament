@@ -15,13 +15,13 @@ export const ORG_DATA = {
   nameEnFull: 'NTPU Student Parliament (Sanxia Campus)',
   nameEnShort: 'NTPUSCS',
   email: 'ntpuscs@gmail.com',
-  office: '商學大樓 B1F08 室',
-  meetingRoom: '綜合體育館 2F44 室',
+  office: '圖書資訊大樓 B1F10 室',
+  meetingRoom: '圖書資訊大樓 B1F10 室',
 };
 
 // 外部連結設定
 export const EXTERNAL_LINKS = {
-  mainWebsite: 'https://ntpusu.ntpu.edu.tw/',
+  mainWebsite: 'https://ntpusu.ntpu.edu.tw/p/412-1015-175.php?Lang=zh-tw',
 };
 
 // 主視覺顏色
