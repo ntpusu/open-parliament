@@ -46,4 +46,4 @@
 ## 授權與聯絡資訊
 
 - **維護單位**：國立臺北大學三峽校區學生議會， Student Congress (Sanxia)
-- **專案授權**：本開源專案依據 [MIT License](https://www.google.com/search?q=LICENSE) 條款發布。至為歡迎各學生自治組織改作。
+- **專案授權**：本開源專案依據 [MIT License](LICENSE) 條款發布。至為歡迎各學生自治組織改作。
