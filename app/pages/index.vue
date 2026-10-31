@@ -160,26 +160,8 @@
       </div>
     </div>
 
-    <!-- 統計資訊 (維護中) -->
-    <!-- <div class="mt-12 bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-        系統統計(維護中)
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="text-center">
-          <div class="text-3xl font-bold text-secondary mb-2">{{ stats.totalBills }}</div>
-          <div class="text-gray-600 dark:text-gray-400">總議案數</div>
-        </div>
-        <div class="text-center">
-          <div class="text-3xl font-bold text-secondary mb-2">{{ getCurrentTerm() }}</div>
-          <div class="text-gray-600 dark:text-gray-400">目前屆次</div>
-        </div>
-        <div class="text-center">
-          <div class="text-3xl font-bold text-secondary mb-2">{{ stats.thisTermBills }}</div>
-          <div class="text-gray-600 dark:text-gray-400">本屆議案數</div>
-        </div>
-      </div>
-    </div>-->
+    <!-- 統計資訊 -->
+    <BillStats :stats="stats" :error="statsError" class="mt-12" />
   </div>
 </template>
 
@@ -194,23 +176,14 @@
     ],
   });
 
-  // 統計資料
-  const stats = ref({
-    totalBills: 0,
-    thisTermBills: 0,
+  // 統計資料：lazy + server:false，讓首頁其餘內容立即渲染，
+  // 不會因 CDN 較慢而拖住整頁 SSR；載入前由 BillStats 顯示骨架。
+  const { data: statsResponse, error: statsError } = useFetch('/api/bills/stats', {
+    key: 'bill-stats',
+    lazy: true,
+    server: false,
   });
-
-  // 載入統計資料
-  onMounted(async () => {
-    try {
-      const { data } = await $fetch('/api/bills/stats');
-      if (data) {
-        stats.value = data;
-      }
-    } catch (error) {
-      console.error('載入統計資料失敗:', error);
-    }
-  });
+  const stats = computed(() => statsResponse.value?.data ?? null);
 
   import { getCurrentTerm } from '~~/shared/utils/term.js';
 
