@@ -20,13 +20,7 @@
         }}
       </p>
       <div class="text-sm text-gray-700 dark:text-gray-300">
-        <p v-if="bill.proposingEntity === '本會議員'">
-          <strong>提案者：</strong>本會{{ bill.proposerName }}議員
-        </p>
-        <p v-else-if="bill.proposingEntity === '本會議長'">
-          <strong>提案者：</strong>本會{{ bill.proposerName }}議長
-        </p>
-        <p v-else><strong>提案者：</strong>{{ bill.proposingEntity }}</p>
+        <p><strong>提案者：</strong>{{ formatProposer(bill) }}</p>
       </div>
     </div>
   </NuxtLink>
