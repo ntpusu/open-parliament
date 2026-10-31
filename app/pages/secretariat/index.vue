@@ -5,6 +5,9 @@
   definePageMeta({
     middleware: ['auth'],
   });
+
+  // 內部工具頁，不需被搜尋引擎收錄
+  useSeoMeta({ title: '草擬系統', robots: 'noindex, nofollow' });
 </script>
 
 <template>

@@ -99,7 +99,6 @@
     ogTitle: () => tempBillNumber.value,
     ogDescription: () => bill.value?.subject || `${tempBillNumber.value}議案詳細資料`,
     description: () => bill.value?.subject || `${tempBillNumber.value}議案詳細資料`,
-    ogSiteName: SITE_CONFIG.name,
     robots: 'noindex, nofollow',
   });
 </script>

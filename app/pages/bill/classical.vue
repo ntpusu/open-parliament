@@ -46,12 +46,10 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'; // 確保引入 computed
-
-  // SEO 設定
-  definePageMeta({
-    title: '議案查詢 - 三峽校區議事服務',
-    description: '查看' + ORG_DATA.nameZhFull + '歷屆議案資料',
+  // SEO 設定（definePageMeta 的 title 不會寫入 <head>，須使用 useSeoMeta）
+  useSeoMeta({
+    title: '傳統查詢介面',
+    description: `以 AppSheet 經典介面查詢${ORG_DATA.nameZhFull}歷屆議案資料。`,
   });
 </script>
 

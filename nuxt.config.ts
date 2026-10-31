@@ -1,4 +1,4 @@
-import { EXTERNAL_LINKS } from './shared/utils/constants';
+import { EXTERNAL_LINKS, SITE_CONFIG } from './shared/utils/constants';
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-02-26',
@@ -23,11 +23,11 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: '北大三峽議事資訊',
+      title: SITE_CONFIG.name,
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: '國立臺北大學學生自治會三峽校區學生議會議事資訊網站。' },
+        { name: 'description', content: `${SITE_CONFIG.fullName}議事資訊網站` },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/site-icon/favicon.ico' },

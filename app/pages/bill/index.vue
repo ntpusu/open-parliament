@@ -83,10 +83,10 @@
 
   const { data: newestBills, pending, error } = await useFetch(`/api/bills?limit=10`);
 
-  // SEO 設定
-  definePageMeta({
+  // SEO 設定（definePageMeta 的 title 不會寫入 <head>，須使用 useSeoMeta）
+  useSeoMeta({
     title: '議案查詢',
-    description: '查看' + ORG_DATA.nameZhFull + '歷屆議案資料。',
+    description: `查看${ORG_DATA.nameZhFull}歷屆議案資料。`,
   });
 </script>
 

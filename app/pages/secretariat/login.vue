@@ -43,6 +43,9 @@
       isLoading.value = false;
     }
   };
+
+  // 內部工具頁，不需被搜尋引擎收錄
+  useSeoMeta({ title: '系統登入', robots: 'noindex, nofollow' });
 </script>
 
 <template>

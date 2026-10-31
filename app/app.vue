@@ -8,20 +8,25 @@
 </template>
 
 <script setup>
-  // 設定全域 meta 標籤
+  // 設定全域 meta 標籤。網站名稱一律取自 SITE_CONFIG，各頁只需設定自己的標題
+  const description = `${SITE_CONFIG.fullName}議事資訊網站`;
+
   useHead({
     htmlAttrs: {
       lang: 'zh-Hant-TW',
     },
-    title: '北大三峽議事資訊網',
+    // 各頁標題後附網站名稱；未設定標題或標題即網站名稱時只顯示網站名稱
+    titleTemplate: (title) =>
+      title && title !== SITE_CONFIG.name ? `${title}｜${SITE_CONFIG.name}` : SITE_CONFIG.name,
     meta: [
-      { name: 'description', content: '國立臺北大學三峽校區學生議會議事資訊網站' },
+      { name: 'description', content: description },
       {
         name: 'keywords',
         content: '國立臺北大學,臺北大學,學生自治,三峽校區,學生議會,資訊公開,NTPU',
       },
-      { property: 'og:title', content: '北大三峽議事資訊網' },
-      { property: 'og:description', content: '國立臺北大學三峽校區學生議會議事資訊網站' },
+      { property: 'og:site_name', content: SITE_CONFIG.name },
+      { property: 'og:title', content: SITE_CONFIG.name },
+      { property: 'og:description', content: description },
       { property: 'og:type', content: 'website' },
       { name: 'twitter:card', content: 'summary_large_image' },
     ],

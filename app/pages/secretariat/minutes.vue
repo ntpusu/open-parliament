@@ -29,6 +29,9 @@
       fetchBills();
     }
   });
+
+  // 內部工具頁，不需被搜尋引擎收錄
+  useSeoMeta({ title: '草擬會議紀錄', robots: 'noindex, nofollow' });
 </script>
 
 <template>
