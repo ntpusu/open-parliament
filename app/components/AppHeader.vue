@@ -19,7 +19,7 @@
                 ></path>
               </svg>
             </div>
-            <h1 class="text-xl font-bold text-gray-900 dark:text-white">{{ SITE_CONFIG.name }}</h1>
+            <span class="text-xl font-bold text-gray-900 dark:text-white">{{ SITE_CONFIG.name }}</span>
           </NuxtLink>
         </div>
 
