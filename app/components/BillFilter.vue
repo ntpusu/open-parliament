@@ -1,274 +1,170 @@
 <template>
-  <div class="bill-filter bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-    <h3
-      class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center cursor-pointer select-none"
-      @click="isCollapsed = !isCollapsed"
-    >
-      <span class="mr-2">篩選議案</span>
-      <svg
-        :class="['transition-transform', isCollapsed ? 'rotate-0' : 'rotate-180']"
-        width="20"
-        height="20"
-        fill="none"
-        viewBox="0 0 20 20"
+  <div class="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      <button
+        type="button"
+        class="flex items-center gap-2 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        :aria-expanded="!isCollapsed"
+        :aria-controls="panelId"
+        @click="isCollapsed = !isCollapsed"
       >
-        <path
-          d="M6 8l4 4 4-4"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </h3>
-    <div v-show="!isCollapsed">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <!-- 編號篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            編號
-          </label>
+        篩選議案
+        <svg
+          :class="['transition-transform', isCollapsed ? 'rotate-0' : 'rotate-180']"
+          width="20"
+          height="20"
+          fill="none"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <path
+            d="M6 8l4 4 4-4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </h2>
+
+    <form v-show="!isCollapsed" :id="panelId" class="mt-4" @submit.prevent="applyFilters">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div class="flex flex-col md:col-span-2 lg:col-span-3">
+          <label :for="`${panelId}-keyword`" :class="labelClass">關鍵字</label>
           <input
-            v-model="localFilters.編號"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="請輸入編號關鍵字"
+            :id="`${panelId}-keyword`"
+            v-model="localFilters.keyword"
+            type="search"
+            :class="inputClass"
+            placeholder="搜尋編號、案由、說明或辦法"
           />
         </div>
 
-        <!-- 提案機關/議員篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            提案機關/議員
-          </label>
-          <input
-            v-model="localFilters['提案機關/議員']"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="請輸入提案機關/議員(完整)"
-          />
-        </div>
-
-        <!-- 提案人篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            提案人
-          </label>
-          <input
-            v-model="localFilters['提案機關主管/提案議員姓名']"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="請輸入提案人姓名"
-          />
-        </div>
-
-        <!-- 提案類型篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            提案類型
-          </label>
-          <select
-            v-model="localFilters.提案類型"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          >
+        <div class="flex flex-col">
+          <label :for="`${panelId}-type`" :class="labelClass">提案類型</label>
+          <select :id="`${panelId}-type`" v-model="localFilters.type" :class="inputClass">
             <option value="">全部類型</option>
-            <option value="人事案">人事案</option>
-            <option value="法規案">法規案</option>
-            <option value="預算案">預算案</option>
-            <option value="決議案">決議案</option>
-            <option value="質詢案">質詢案</option>
-            <option value="其他">其他</option>
+            <option v-for="option in typeOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
           </select>
         </div>
 
-        <!-- 日期範圍篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            提案日期起
-          </label>
+        <div class="flex flex-col">
+          <label :for="`${panelId}-agency`" :class="labelClass">提案機關/議員</label>
+          <select :id="`${panelId}-agency`" v-model="localFilters.agency" :class="inputClass">
+            <option value="">全部提案者</option>
+            <option v-for="option in agencyOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+
+        <div class="flex flex-col">
+          <label :for="`${panelId}-session`" :class="labelClass">排入會議</label>
           <input
+            :id="`${panelId}-session`"
+            v-model="localFilters.scheduledSession"
+            type="search"
+            :class="inputClass"
+            placeholder="例如：臨時會"
+          />
+        </div>
+
+        <div class="flex flex-col">
+          <label :for="`${panelId}-from`" :class="labelClass">提案日期起</label>
+          <input
+            :id="`${panelId}-from`"
             v-model="localFilters.dateFrom"
             type="date"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            :class="inputClass"
           />
         </div>
 
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            提案日期迄
-          </label>
+        <div class="flex flex-col">
+          <label :for="`${panelId}-to`" :class="labelClass">提案日期迄</label>
           <input
+            :id="`${panelId}-to`"
             v-model="localFilters.dateTo"
             type="date"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          />
-        </div>
-
-        <!-- 案由篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            案由
-          </label>
-          <input
-            v-model="localFilters.案由"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="請輸入案由關鍵字"
-          />
-        </div>
-
-        <!-- 說明篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            說明
-          </label>
-          <input
-            v-model="localFilters.說明"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="請輸入說明關鍵字"
-          />
-        </div>
-
-        <!-- 辦法篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            辦法
-          </label>
-          <input
-            v-model="localFilters.辦法"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="請輸入辦法關鍵字"
-          />
-        </div>
-
-        <!-- 排入會議篩選 -->
-        <div class="filter-group">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            排入會議
-          </label>
-          <input
-            v-model="localFilters.排入會議"
-            type="text"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            placeholder="排入會議關鍵字..."
+            :class="inputClass"
           />
         </div>
       </div>
 
-      <!-- 操作按鈕 -->
-      <div class="flex justify-end space-x-3 mt-6">
+      <div class="mt-6 flex justify-end gap-3">
         <button
+          type="button"
+          class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
           @click="clearFilters"
-          class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
         >
           清除篩選
         </button>
         <button
-          @click="applyFilters"
-          class="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded-md transition-colors"
+          type="submit"
+          class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:bg-primary-400 dark:hover:bg-primary-300"
         >
           套用篩選
         </button>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
 <script setup>
-  import { ref, watch } from 'vue';
+  import { ref, watch, useId } from 'vue';
 
-  const props = defineProps({
-    filters: {
-      type: Object,
-      default: () => ({}),
-    },
-  });
-
-  const emit = defineEmits(['update:filters']);
-
-  const localFilters = ref({
-    編號: '',
-    '提案機關/議員': '',
-    '提案機關主管/提案議員姓名': '',
-    提案類型: '',
-    案由: '',
-    說明: '',
-    辦法: '',
-    排入會議: '',
+  /** 篩選條件的鍵名須與父頁面 filteredBills 讀取的鍵一致 */
+  const emptyFilters = () => ({
+    keyword: '',
+    type: '',
+    agency: '',
+    scheduledSession: '',
     dateFrom: '',
     dateTo: '',
-    ...props.filters,
   });
 
-  // 監聽父組件傳入的篩選條件變化
+  const props = defineProps({
+    filters: { type: Object, default: () => ({}) },
+    // 選項由父頁面依實際資料產生，避免與資料中的類型名稱不符
+    typeOptions: { type: Array, default: () => [] },
+    agencyOptions: { type: Array, default: () => [] },
+  });
+
+  const emit = defineEmits(['update:filters', 'reset-filters']);
+
+  const panelId = useId();
+  const isCollapsed = ref(true);
+  const localFilters = ref({ ...emptyFilters(), ...pick(props.filters) });
+
+  // 只取本元件管理的鍵，忽略父頁面附帶的其他狀態（例如 term）
+  function pick(source) {
+    const result = {};
+    for (const key of Object.keys(emptyFilters())) {
+      if (source?.[key] !== undefined) result[key] = source[key];
+    }
+    return result;
+  }
+
   watch(
     () => props.filters,
     (newFilters) => {
-      localFilters.value = { ...localFilters.value, ...newFilters };
+      localFilters.value = { ...emptyFilters(), ...pick(newFilters) };
     },
     { deep: true },
   );
 
   const applyFilters = () => {
-    // 過濾掉空值
-    const activeFilters = Object.entries(localFilters.value)
-      .filter(([key, value]) => value !== '' && value !== null && value !== undefined)
-      .reduce((acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-      }, {});
-
-    emit('update:filters', activeFilters);
+    emit('update:filters', { ...localFilters.value });
   };
 
   const clearFilters = () => {
-    localFilters.value = {
-      編號: '',
-      '提案機關/議員': '',
-      '提案機關主管/提案議員姓名': '',
-      提案類型: '',
-      案由: '',
-      說明: '',
-      辦法: '',
-      排入會議: '',
-      dateFrom: '',
-      dateTo: '',
-    };
-    emit('update:filters', {});
+    localFilters.value = emptyFilters();
+    emit('reset-filters');
   };
 
-  const isCollapsed = ref(true);
-
-  // 實時篩選（可選，如果需要即時篩選效果）
-  // watch(localFilters, () => {
-  //   applyFilters()
-  // }, { deep: true })
+  const labelClass = 'mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300';
+  const inputClass =
+    'w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm placeholder-gray-400 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500';
 </script>
-
-<style scoped>
-  .filter-group {
-    @apply flex flex-col;
-  }
-
-  .bg-primary {
-    background-color: #0f2d4b;
-  }
-
-  .bg-primary-dark {
-    background-color: #0a1f35;
-  }
-
-  .ring-primary {
-    --tw-ring-color: #0f2d4b;
-  }
-
-  .focus\:ring-primary:focus {
-    --tw-ring-color: #0f2d4b;
-  }
-
-  .border-primary {
-    border-color: #0f2d4b;
-  }
-</style>

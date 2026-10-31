@@ -55,7 +55,8 @@
       <div v-if="!pending && !error" class="mb-8">
         <BillFilter
           :filters="filters"
-          :available-terms="[parseInt(route.params.term)]"
+          :type-options="typeOptions"
+          :agency-options="agencyOptions"
           @update:filters="updateFilters"
           @reset-filters="resetFilters"
         />
@@ -133,15 +134,25 @@
   const currentPage = ref(1);
   const itemsPerPage = 10;
 
-  // 篩選器狀態 (為特定屆次頁面調整)
-  const filters = ref({
+  // 篩選器狀態（鍵名與 BillFilter 一致）
+  const emptyFilters = () => ({
     term: String(term),
     type: '',
     agency: '',
     keyword: '',
+    scheduledSession: '',
     dateFrom: '',
     dateTo: '',
   });
+  const filters = ref(emptyFilters());
+
+  // 篩選選項依本屆實際資料產生
+  const uniqueSorted = (values) =>
+    [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+  const typeOptions = computed(() => uniqueSorted((bills.value ?? []).map((b) => b.billType)));
+  const agencyOptions = computed(() =>
+    uniqueSorted((bills.value ?? []).map((b) => b.proposingEntity)),
+  );
 
   // 用過濾後的資料來算分頁數
   const frontendTotalPages = computed(() => {
@@ -160,9 +171,16 @@
         // 機關篩選
         if (filters.value.agency && bill.proposingEntity !== filters.value.agency) return false;
 
+        // 排入會議篩選（部分比對）
+        if (
+          filters.value.scheduledSession &&
+          !(bill.scheduledSession ?? '').includes(filters.value.scheduledSession.trim())
+        )
+          return false;
+
         // 關鍵字篩選
         if (filters.value.keyword) {
-          const keyword = filters.value.keyword.toLowerCase();
+          const keyword = filters.value.keyword.trim().toLowerCase();
           const content = [bill.subject, bill.description, bill.proposedAction, bill.billNumber]
             .filter(Boolean)
             .join(' ')
@@ -198,19 +216,12 @@
 
   // 方法
   const updateFilters = (newFilters) => {
-    filters.value = { ...filters.value, ...newFilters, term: String(term) };
+    filters.value = { ...emptyFilters(), ...newFilters, term: String(term) };
     currentPage.value = 1;
   };
 
   const resetFilters = () => {
-    filters.value = {
-      term: String(term),
-      type: '',
-      agency: '',
-      keyword: '',
-      dateFrom: '',
-      dateTo: '',
-    };
+    filters.value = emptyFilters();
     currentPage.value = 1;
   };
 
