@@ -168,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import {
     DocumentIcon,
     ArrowTopRightOnSquareIcon,
@@ -287,11 +287,28 @@
   };
 
   // 列印頁尾資訊
-  const printFooterText = computed(() => {
-    const now = new Date();
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const dateStr = `資料為${now.getFullYear() - 1911}年${now.getMonth() + 1}月${now.getDate()}日${pad(now.getHours())}時${pad(now.getMinutes())}分${pad(now.getSeconds())}秒`;
-    return `${dateStr}自網址 ${typeof window !== 'undefined' ? window.location.href : ''} 載入。`;
+  // 列印頁尾：載入時間與網址只存在於瀏覽器端，因此於掛載後才產生，
+  // 避免伺服器（UTC、無網址）與瀏覽器渲染結果不同而造成 hydration 不一致
+  const printFooterText = ref('');
+
+  const formatTaipeiRocTime = (date: Date): string => {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Taipei',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(date);
+    const get = (type: string) => parts.find((part) => part.type === type)?.value ?? '';
+    const rocYear = Number(get('year')) - 1911;
+    return `${rocYear}年${get('month')}月${get('day')}日${get('hour')}時${get('minute')}分${get('second')}秒`;
+  };
+
+  onMounted(() => {
+    printFooterText.value = `資料為${formatTaipeiRocTime(new Date())}自網址 ${window.location.href} 載入。`;
   });
 
   const actionButtonClass =
