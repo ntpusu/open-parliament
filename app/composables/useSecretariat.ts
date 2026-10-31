@@ -6,16 +6,18 @@ import { SITE_CONFIG } from '~~/shared/utils/constants';
 import type { Bill } from '~~/shared/types/bill';
 
 /**
- * 將阿拉伯數字轉換為中文數字
+ * 將阿拉伯數字轉換為中文數字（支援 0–99，超出範圍則回傳阿拉伯數字）
+ * 例：10 → 十、15 → 十五、20 → 二十、21 → 二十一
  * @param num 阿拉伯數字
  * @returns 中文數字字串
  */
 function toChineseNumeral(num: number): string {
-  const chineseNumerals = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
-  if (num >= 0 && num <= 10) return chineseNumerals[num] ?? num.toString();
-  if (num > 10 && num < 20) return '十' + (num % 10 === 0 ? '' : chineseNumerals[num % 10]);
-  // 對於大於20的數字簡單處理，如果超出範圍，直接返回數字字串
-  return num.toString();
+  const digits = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  if (!Number.isInteger(num) || num < 0 || num > 99) return num.toString();
+  if (num < 10) return digits[num]!;
+  const tens = Math.floor(num / 10);
+  const ones = num % 10;
+  return `${tens === 1 ? '' : digits[tens]}十${ones === 0 ? '' : digits[ones]}`;
 }
 
 /**
