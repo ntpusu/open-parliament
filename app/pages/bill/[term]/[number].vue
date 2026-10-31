@@ -229,7 +229,7 @@
   } from '@heroicons/vue/24/outline';
   import { getCurrentTerm } from '#imports';
   import { useRoute, createError, useFetch } from '#app';
-  import { ORG_DATA } from '~/utils/constants';
+  import { ORG_DATA } from '~~/shared/utils/constants';
   import type { Bill } from '~~/shared/types/bill';
 
   // 獲取路由參數
