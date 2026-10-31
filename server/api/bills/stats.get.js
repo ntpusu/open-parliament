@@ -1,36 +1,25 @@
-// api/bills/stats.js
+// server/api/bills/stats.get.ts
+// 首頁統計資訊：總議案數、目前屆次、本屆議案數
+import { getCurrentTerm } from '~~/shared/utils/term';
 
 export default defineEventHandler(async (event) => {
-  // In a real application, you would fetch these statistics from a database
-  // or another data source. This is a placeholder example.
+  const currentTerm = getCurrentTerm();
 
-  try {
-    // Example: Simulate fetching data
-    // const totalBills = await getFromDatabase('total_bills');
-    // const thisTermBills = await getFromDatabase('this_term_bills');
+  // useBillService 內部已處理 CDN 失敗並拋出 H3 錯誤，這裡不需重複包裝
+  const allBills = await useBillService().getAllBills();
 
-    // For demonstration, we'll use static placeholder data.
-    // Replace this with your actual logic to retrieve the real statistics.
-    const totalBills = 'NaN'; // Example value
-    const thisTermBills = 'NaN'; // Example value
+  // 本屆議案：換屆過渡期若最新資料檔仍為舊屆，則自然為 0，與 getBillsByTerm 行為一致
+  const thisTermBills = allBills.filter((bill) => bill.term === currentTerm).length;
 
-    // Return the data in the expected format
-    return {
-      data: {
-        totalBills: totalBills,
-        currentTerm: currentTerm,
-        thisTermBills: thisTermBills,
-      },
-      message: 'Statistics fetched successfully',
-    };
-  } catch (error) {
-    console.error('Error fetching bill statistics:', error);
-    // In a production environment, you might want to send a more generic error message
-    // and log the detailed error server-side.
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch bill statistics',
-      data: null, // Or an empty object if preferred
-    });
-  }
+  // 統計數字變動緩慢，允許瀏覽器與 CDN 快取 5 分鐘，避免首頁每次載入都重抓兩份 JSON
+  setHeader(event, 'Cache-Control', 'public, max-age=300, s-maxage=300');
+
+  return {
+    data: {
+      totalBills: allBills.length,
+      currentTerm,
+      thisTermBills,
+    },
+    message: 'Statistics fetched successfully',
+  };
 });
