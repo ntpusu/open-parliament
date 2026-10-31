@@ -7,18 +7,11 @@
         <!-- Logo 和網站名稱 -->
         <div class="flex items-center space-x-3">
           <NuxtLink to="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <div
-              class="w-8 h-8 bg-primary rounded-md flex items-center justify-center dark:bg-primary-400"
-            >
-              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                ></path>
-              </svg>
-            </div>
+            <!-- 標誌為裝飾用途（旁邊已有網站名稱），故 alt 留空；深色模式改用調亮的版本 -->
+            <span class="shrink-0">
+              <img src="/ntpuscs-logo.svg" alt="" class="h-9 w-auto dark:hidden" />
+              <img src="/ntpuscs-logo-dark.svg" alt="" class="hidden h-9 w-auto dark:block" />
+            </span>
             <span class="text-xl font-bold text-gray-900 dark:text-white">{{
               SITE_CONFIG.name
             }}</span>
