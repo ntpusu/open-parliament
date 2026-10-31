@@ -22,6 +22,8 @@ export const ORG_DATA = {
 // 外部連結設定
 export const EXTERNAL_LINKS = {
   mainWebsite: 'https://ntpusu.ntpu.edu.tw/p/412-1015-175.php?Lang=zh-tw',
+  // 委員會報告已移至學生會網站；本站 /committee-reports 亦以 routeRules 導向此處
+  committeeReports: 'https://ntpusu.ntpu.edu.tw/p/412-1015-245.php?Lang=zh-tw',
 };
 
 // 主視覺顏色

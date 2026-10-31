@@ -31,6 +31,14 @@
           >
             議案查詢
           </NuxtLink>
+          <a
+            :href="EXTERNAL_LINKS.committeeReports"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors"
+          >
+            委員會報告
+          </a>
           <NuxtLink
             to="/secretariat"
             class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors"
@@ -81,13 +89,14 @@
             議案查詢
           </NuxtLink>
 
-          <NuxtLink
-            to="/committee-reports"
+          <a
+            :href="EXTERNAL_LINKS.committeeReports"
+            target="_blank"
+            rel="noopener noreferrer"
             class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors py-2"
-            @click="closeMobileMenu"
           >
             委員會報告
-          </NuxtLink>
+          </a>
           <NuxtLink
             to="/secretariat"
             class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors py-2"
