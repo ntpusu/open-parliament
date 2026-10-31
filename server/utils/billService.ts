@@ -109,7 +109,6 @@ export const useBillService = () => {
   };
 
   // 由屆次 + 流水號取得單一特定議案
-  // 先以 term/serialNumber 定位 rowIndex，再交由 getBillByRowIndex 取值
   const getBillById = async (
     targetTerm: number,
     targetSerialNumber: number,
@@ -122,13 +121,11 @@ export const useBillService = () => {
       return undefined;
     }
 
-    const target = bills.find(
+    // resolveDataSource 已取得完整的議案資料，直接回傳即可，
+    // 不需再經 getBillByRowIndex 重新下載兩份 JSON
+    return bills.find(
       (bill) => bill.term === targetTerm && bill.serialNumber === targetSerialNumber,
     );
-
-    if (!target) return undefined;
-
-    return getBillByRowIndex(target.rowIndex);
   };
 
   // 取得所有議案
