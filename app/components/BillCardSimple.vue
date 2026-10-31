@@ -27,41 +27,12 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue';
-
-  const props = defineProps({
+  defineProps({
     bill: {
       type: Object,
       required: true,
     },
   });
-
-  const router = useRouter();
-
-  const billTerm = computed(() => {
-    if (typeof props.bill.billNumber !== 'string') return '26';
-    const match = props.bill.billNumber.match(/(\d+)屆/);
-    return match ? match[1] : '26';
-  });
-
-  const billNumber = computed(() => {
-    if (typeof props.bill.billNumber !== 'string') return '1';
-    const match = props.bill.billNumber.match(/第(\d+)號/);
-    return match ? match[1] : '1';
-  });
-
-  const formatDate = (dateString) => {
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('zh-TW', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-    } catch (error) {
-      return dateString;
-    }
-  };
 </script>
 
 <style scoped>

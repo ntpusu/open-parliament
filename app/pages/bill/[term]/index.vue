@@ -106,7 +106,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, watch } from 'vue';
+  import { ref, computed } from 'vue';
   import { useRoute } from 'vue-router';
   import { ExclamationTriangleIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
   import { getCurrentTerm, getValidTerms } from '~~/shared/utils/term';
@@ -127,7 +127,7 @@
     return typeof getValidTerms === 'function' && !getValidTerms().includes(term);
   });
 
-  const { data: bills, pending, error, refresh } = await useFetch(`/api/bills?term=${term}`);
+  const { data: bills, pending, error } = await useFetch(`/api/bills?term=${term}`);
 
   // 響應式數據
   const currentPage = ref(1);
@@ -147,20 +147,6 @@
   const frontendTotalPages = computed(() => {
     return Math.ceil(filteredBills.value.length / itemsPerPage);
   });
-
-  // 監聽路由參數變化，當屆次改變時重設篩選條件並重新載入
-  watch(
-    () => route.params.term,
-    async (newTerm) => {
-      if (newTerm && parseInt(newTerm) !== term) {
-        const newTermParsed = parseInt(newTerm);
-        filters.value.term = String(newTermParsed);
-        currentPage.value = 1;
-        if (typeof refresh === 'function') await refresh();
-      }
-    },
-    { immediate: true },
-  );
 
   // 計算過濾後的議案
   const filteredBills = computed(() => {
@@ -228,24 +214,7 @@
     currentPage.value = 1;
   };
 
-  const handlePageChange = (page) => {
-    currentPage.value = page;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   // 輔助函數
-  const extractTermFromNumber = (billNumber) => {
-    if (typeof billNumber !== 'string') return null;
-    const match = billNumber.match(/^(\d+)屆/);
-    return match ? parseInt(match[1]) : null;
-  };
-
-  const extractNumberFromNumber = (billNumber) => {
-    if (typeof billNumber !== 'string') return null;
-    const match = billNumber.match(/第(\d+)號$/);
-    return match ? parseInt(match[1]) : null;
-  };
-
   const normalizeDate = (date) => {
     if (!date) return '';
     if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}/.test(date)) return date;
@@ -267,11 +236,6 @@
     const d = new Date(date);
     return isNaN(d.getTime()) ? '' : d.toISOString();
   };
-
-  // 監聽前端頁碼變化，僅用於控制 paginatedBills，不觸發 API 請求
-  watch(currentPage, () => {
-    // 當前頁碼改變時，不需要重新獲取數據，因為數據已經在 bills.value 中
-  });
 
   // SEO 設定
   useHead({
