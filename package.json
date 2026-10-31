@@ -13,16 +13,19 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
-    "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/color-mode": "^4.1.0",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "nuxt": "^4.6.3",
-    "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "vue": "^3.5.44",
+    "vue-router": "^5.4.0"
   },
   "devDependencies": {
-    "nuxi": "^3.25.1",
-    "prettier": "^3.9.4",
-    "wrangler": "^4.68.1"
+    "nuxi": "^4.0.1",
+    "prettier": "^3.9.10",
+    "wrangler": "^4.156.0"
   },
-  "packageManager": "pnpm@11.9.0"
+  "packageManager": "pnpm@12.17.0",
+  "engines": {
+    "node": "^22.22.3 || >=24.15.0"
+  }
 }

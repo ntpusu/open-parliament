@@ -108,7 +108,6 @@
 
 <script setup>
   import { ref, computed } from 'vue';
-  import { useRoute } from 'vue-router';
   import { ExclamationTriangleIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
   import { getCurrentTerm, getValidTerms } from '~~/shared/utils/term';
 
