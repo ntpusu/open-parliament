@@ -204,7 +204,7 @@
     PrinterIcon,
   } from '@heroicons/vue/24/outline';
   import { getCurrentTerm } from '#imports';
-  import { useRoute, createError, useFetch, useHead } from '#app';
+  import { useRoute, createError, useFetch } from '#app';
   import { ORG_DATA } from '~/utils/constants';
   import type { Bill } from '~~/shared/types/bill';
 
@@ -236,20 +236,17 @@
   });
 
   // SEO 設定
-  useHead(() => ({
-    title: tempBillNumber.value,
-    meta: [
-      {
-        name: 'description',
-        // 修正：加上 .value
-        content: bill.value?.subject ? bill.value.subject : `${tempBillNumber.value}議案詳細資料`,
-      },
-      {
-        name: 'robots',
-        content: 'noindex, nofollow', // 由於議案數量龐大且偶爾涉及個人資料(如人事案)，先使用 noindex, nofollow
-      },
-    ],
-  }));
+  useSeoMeta({
+    title: () =>
+      bill.value?.subject
+        ? `${tempBillNumber.value}｜${bill.value.subject}`
+        : tempBillNumber.value,
+    ogTitle: () => tempBillNumber.value,
+    ogDescription: () => bill.value?.subject || `${tempBillNumber.value}議案詳細資料`,
+    description: () => bill.value?.subject || `${tempBillNumber.value}議案詳細資料`,
+    ogSiteName: SITE_CONFIG.name,
+    robots: 'noindex, nofollow',
+  });
 
 
   // helper: 動態欄位取值（搭配 printFields 的 key）
