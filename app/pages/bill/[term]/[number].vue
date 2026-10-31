@@ -146,29 +146,20 @@
         </table>
       </div>
       <!-- 下排按鈕：列印時隱藏 -->
-            <div class="flex flex-wrap gap-4 print:hidden">
-              <NuxtLink
-                :to="`/bill/${term}`"
-                class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <ChevronLeftIcon class="h-4 w-4 mr-2" />
-                返回議案清單
-              </NuxtLink>
-              <button
-                @click="copyUrl"
-                class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors dark:bg-primary-400 dark:hover:bg-primary-300"
-              >
-                <LinkIcon class="h-4 w-4 mr-2" />
-                複製連結
-              </button>
-              <button
-                @click="printPage"
-                class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors dark:bg-green-700 dark:hover:bg-green-800"
-              >
-                <PrinterIcon class="h-4 w-4 mr-2" />
-                列印
-              </button>
-            </div>
+      <div class="flex flex-wrap gap-3 print:hidden">
+        <NuxtLink :to="`/bill/${term}`" :class="actionButtonClass">
+          <ChevronLeftIcon class="mr-2 h-4 w-4" />
+          返回議案清單
+        </NuxtLink>
+        <button type="button" :class="actionButtonClass" @click="copyUrl">
+          <LinkIcon class="mr-2 h-4 w-4" />
+          複製連結
+        </button>
+        <button type="button" :class="actionButtonClass" @click="printPage">
+          <PrinterIcon class="mr-2 h-4 w-4" />
+          列印
+        </button>
+      </div>
     </div>
 
     <div v-if="!pending && !error && !bill" class="text-center py-12 print:hidden">
@@ -362,6 +353,9 @@
     const dateStr = `資料為${now.getFullYear() - 1911}年${now.getMonth() + 1}月${now.getDate()}日${pad(now.getHours())}時${pad(now.getMinutes())}分${pad(now.getSeconds())}秒`;
     return `${dateStr}自網址 ${typeof window !== 'undefined' ? window.location.href : ''} 載入。`;
   });
+
+  const actionButtonClass =
+    'inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700';
 </script>
 
 <style>
