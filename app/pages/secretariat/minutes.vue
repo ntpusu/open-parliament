@@ -63,7 +63,8 @@
           生成的會議紀錄 (HTML 原始碼)：
         </label>
         <p class="text-red-600 font-semibold mb-2">
-          注意：輸出內容已由 Markdown 改為 HTML 原始碼，可直接複製使用；下方「預覽效果」可查看網頁呈現。
+          注意：輸出內容已由 Markdown 改為 HTML
+          原始碼，可直接複製使用；下方「預覽效果」可查看網頁呈現。
         </p>
         <textarea
           id="minutesOutput"

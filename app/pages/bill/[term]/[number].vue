@@ -43,33 +43,47 @@
     <div v-if="status !== 'pending' && !error && bill" class="space-y-6">
       <!-- ===== 螢幕版 ===== -->
       <div class="space-y-6 print:hidden">
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div
+          class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+        >
           <span
             v-if="bill.billType"
             class="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200"
           >
             {{ bill.billType }}
           </span>
-          <h1 class="mt-3 text-2xl font-bold text-gray-900 dark:text-white">{{ bill.billNumber }}</h1>
+          <h1 class="mt-3 text-2xl font-bold text-gray-900 dark:text-white">
+            {{ bill.billNumber }}
+          </h1>
           <p class="mt-2 text-lg text-gray-700 dark:text-gray-300">{{ bill.subject }}</p>
 
-          <dl class="mt-5 grid gap-x-8 gap-y-3 border-t border-gray-100 pt-4 text-sm dark:border-gray-700 sm:grid-cols-2">
+          <dl
+            class="mt-5 grid gap-x-8 gap-y-3 border-t border-gray-100 pt-4 text-sm dark:border-gray-700 sm:grid-cols-2"
+          >
             <div>
               <dt class="text-gray-500 dark:text-gray-400">提案者</dt>
-              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ proposerText || '無' }}</dd>
+              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">
+                {{ proposerText || '無' }}
+              </dd>
             </div>
             <div>
               <dt class="text-gray-500 dark:text-gray-400">提案時間</dt>
-              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ bill.submittedAt || '無' }}</dd>
+              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">
+                {{ bill.submittedAt || '無' }}
+              </dd>
             </div>
             <div v-if="bill.scheduledSession">
               <dt class="text-gray-500 dark:text-gray-400">排入會議</dt>
-              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">{{ bill.scheduledSession }}</dd>
+              <dd class="mt-0.5 font-medium text-gray-900 dark:text-white">
+                {{ bill.scheduledSession }}
+              </dd>
             </div>
           </dl>
         </div>
 
-        <section class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
+        <section
+          class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800"
+        >
           <div class="p-6">
             <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400">說明</h2>
             <div class="mt-2 whitespace-pre-wrap leading-relaxed text-gray-800 dark:text-gray-200">
@@ -91,7 +105,9 @@
           </div>
         </section>
 
-        <section class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <section
+          class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+        >
           <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400">附件</h2>
           <ul v-if="attachments.length" class="mt-3 space-y-2">
             <li v-for="(attachment, i) in attachments" :key="i">
@@ -103,7 +119,9 @@
               >
                 <DocumentIcon class="h-5 w-5 shrink-0" />
                 <span class="min-w-0 flex-1 break-words">{{ attachment.name }}</span>
-                <ArrowTopRightOnSquareIcon class="h-4 w-4 shrink-0 opacity-60 group-hover:opacity-100" />
+                <ArrowTopRightOnSquareIcon
+                  class="h-4 w-4 shrink-0 opacity-60 group-hover:opacity-100"
+                />
               </a>
             </li>
           </ul>
@@ -115,8 +133,14 @@
       <div class="hidden overflow-hidden rounded-lg border border-gray-200 print:block">
         <table class="w-full">
           <tbody>
-            <tr v-for="field in printFields" :key="field.key" class="border-b border-gray-200 last:border-b-0">
-              <td class="w-1/4 whitespace-nowrap px-6 py-4 text-sm font-medium">{{ field.label }}</td>
+            <tr
+              v-for="field in printFields"
+              :key="field.key"
+              class="border-b border-gray-200 last:border-b-0"
+            >
+              <td class="w-1/4 whitespace-nowrap px-6 py-4 text-sm font-medium">
+                {{ field.label }}
+              </td>
               <td class="px-6 py-4 text-sm">
                 <div v-if="field.key === 'attachments'" class="break-all">
                   <span
@@ -238,16 +262,13 @@
   // SEO 設定
   useSeoMeta({
     title: () =>
-      bill.value?.subject
-        ? `${tempBillNumber.value}｜${bill.value.subject}`
-        : tempBillNumber.value,
+      bill.value?.subject ? `${tempBillNumber.value}｜${bill.value.subject}` : tempBillNumber.value,
     ogTitle: () => tempBillNumber.value,
     ogDescription: () => bill.value?.subject || `${tempBillNumber.value}議案詳細資料`,
     description: () => bill.value?.subject || `${tempBillNumber.value}議案詳細資料`,
     ogSiteName: SITE_CONFIG.name,
     robots: 'noindex, nofollow',
   });
-
 
   // helper: 動態欄位取值（搭配 printFields 的 key）
   const getField = (fieldName: string): unknown => {
