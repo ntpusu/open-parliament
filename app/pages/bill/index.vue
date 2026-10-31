@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'; // 確保引入 computed
+  import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
   import { getCurrentTerm, getValidTerms, getEarliestTerm } from '~~/shared/utils/term';
 
   const { data: newestBills, pending, error } = await useFetch(`/api/bills?limit=10`);
