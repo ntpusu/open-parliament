@@ -1,16 +1,16 @@
 <template>
   <div class="container mx-auto px-4 py-8">
-    <nav class="mb-6">
+    <nav class="mb-6" aria-label="麵包屑">
       <ol class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
         <li>
           <NuxtLink to="/" class="hover:text-primary">首頁</NuxtLink>
         </li>
-        <li>/</li>
+        <li aria-hidden="true">/</li>
         <li>
           <NuxtLink to="/bill" class="hover:text-primary">議案查詢</NuxtLink>
         </li>
-        <li>/</li>
-        <li class="text-gray-900 dark:text-white">第{{ term }}屆</li>
+        <li aria-hidden="true">/</li>
+        <li class="text-gray-900 dark:text-white" aria-current="page">第{{ term }}屆</li>
       </ol>
     </nav>
 

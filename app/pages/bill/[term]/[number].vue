@@ -1,21 +1,21 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <!-- 導覽列與麵包屑：列印時隱藏 -->
-    <nav class="mb-6 print:hidden">
+    <nav class="mb-6 print:hidden" aria-label="麵包屑">
       <ol class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
         <li>
           <NuxtLink to="/" class="hover:text-primary">首頁</NuxtLink>
         </li>
-        <li>/</li>
+        <li aria-hidden="true">/</li>
         <li>
           <NuxtLink to="/bill" class="hover:text-primary">議案查詢</NuxtLink>
         </li>
-        <li>/</li>
+        <li aria-hidden="true">/</li>
         <li>
           <NuxtLink :to="`/bill/${term}`" class="hover:text-primary">第{{ term }}屆</NuxtLink>
         </li>
-        <li>/</li>
-        <li class="text-gray-900 dark:text-white">第{{ number }}號</li>
+        <li aria-hidden="true">/</li>
+        <li class="text-gray-900 dark:text-white" aria-current="page">第{{ number }}號</li>
       </ol>
     </nav>
 

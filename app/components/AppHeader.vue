@@ -19,7 +19,9 @@
                 ></path>
               </svg>
             </div>
-            <span class="text-xl font-bold text-gray-900 dark:text-white">{{ SITE_CONFIG.name }}</span>
+            <span class="text-xl font-bold text-gray-900 dark:text-white">{{
+              SITE_CONFIG.name
+            }}</span>
           </NuxtLink>
         </div>
 
@@ -60,10 +62,20 @@
         <div class="md:hidden flex items-center space-x-3">
           <ThemeToggle />
           <button
+            type="button"
+            :aria-label="mobileMenuOpen ? '關閉選單' : '開啟選單'"
+            :aria-expanded="mobileMenuOpen"
+            aria-controls="mobile-menu"
             @click="toggleMobileMenu"
             class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors"
           >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -78,6 +90,7 @@
       <!-- 行動版選單 -->
       <div
         v-if="mobileMenuOpen"
+        id="mobile-menu"
         class="md:hidden py-4 border-t border-gray-200 dark:border-gray-700"
       >
         <nav class="flex flex-col space-y-3">

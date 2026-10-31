@@ -153,6 +153,7 @@
 
     <div
       v-if="showCopySuccess"
+      role="status"
       class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 print:hidden"
     >
       連結已複製到剪貼簿

@@ -69,6 +69,8 @@
           >
             <button
               v-if="page !== '...'"
+              type="button"
+              :aria-current="page === currentPage ? 'page' : undefined"
               @click="goToPage(page)"
               :class="[
                 'relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 focus:z-20 focus:outline-offset-0 transition-colors',

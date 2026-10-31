@@ -7,6 +7,7 @@
 
     <div class="w-full max-w-[1000px] h-[450px] mx-auto bg-primary-100">
       <iframe
+        title="議案即時查詢系統（AppSheet）"
         src="https://www.appsheet.com/start/44df5ea0-8f78-4d04-b897-79d7ca662248"
         width="100%"
         height="450"
@@ -18,6 +19,7 @@
         如果在網頁中看不到提案查詢系統畫面，請您<a
           href="https://www.appsheet.com/start/44df5ea0-8f78-4d04-b897-79d7ca662248"
           target="_blank"
+          rel="noopener noreferrer"
           >直接點選連結</a
         >瀏覽。
       </p>
