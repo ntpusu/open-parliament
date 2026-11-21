@@ -34,12 +34,6 @@
           >
             委員會報告
           </a>
-          <NuxtLink
-            to="/secretariat"
-            class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors"
-          >
-            草擬系統
-          </NuxtLink>
           <a
             :href="EXTERNAL_LINKS.mainWebsite"
             target="_blank"
@@ -103,13 +97,6 @@
           >
             委員會報告
           </a>
-          <NuxtLink
-            to="/secretariat"
-            class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors py-2"
-            @click="closeMobileMenu"
-          >
-            草擬系統
-          </NuxtLink>
           <a
             :href="EXTERNAL_LINKS.mainWebsite"
             target="_blank"
