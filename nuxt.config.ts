@@ -1,4 +1,5 @@
 import { EXTERNAL_LINKS, SITE_CONFIG } from './shared/utils/constants';
+import { EARLIEST_TERM, LATEST_TERM } from './shared/utils/term';
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-02-26',
@@ -26,7 +27,10 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: `${SITE_CONFIG.fullName}議事資訊網站` },
+        {
+          name: 'description',
+          content: `${SITE_CONFIG.fullName}第 ${EARLIEST_TERM} 至 ${LATEST_TERM} 屆議事資訊網站`,
+        },
       ],
       link: [
         // 不支援 SVG 的瀏覽器使用 favicon.ico；其餘使用可隨深色主題調色的 favicon.svg

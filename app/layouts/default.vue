@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
     <AppHeader />
+    <ArchiveNotice />
 
     <main class="flex-grow container mx-auto px-4 py-8">
       <slot />
@@ -14,6 +15,7 @@
   import { onErrorCaptured } from 'vue';
   import AppHeader from '~/components/AppHeader.vue'; // 引入頂部導覽列組件
   import AppFooter from '~/components/AppFooter.vue'; // 引入底部頁腳組件
+  import ArchiveNotice from '~/components/ArchiveNotice.vue'; // 引入資料範圍公告
 
   // 錯誤處理：捕獲子組件中的錯誤
   // 這是一個全局的錯誤捕獲機制，可以在這裡處理應用中發生的任何未捕獲的錯誤。

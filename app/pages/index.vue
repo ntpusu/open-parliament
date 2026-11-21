@@ -8,6 +8,9 @@
       <p class="text-xl text-gray-600 dark:text-gray-400">
         {{ SITE_CONFIG.fullName }}
       </p>
+      <p class="mt-2 text-gray-600 dark:text-gray-400">
+        第 {{ getEarliestTerm() }} 屆至第 {{ getLatestTerm() }} 屆議事資料典藏
+      </p>
     </div>
 
     <!-- 服務區塊 -->
@@ -31,7 +34,8 @@
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">議案查詢</h2>
           </div>
           <p class="text-gray-600 dark:text-gray-400 mb-4">
-            查詢歷屆議案資料，支援多種篩選條件和分頁瀏覽。
+            查詢第 {{ getEarliestTerm() }} 至
+            {{ getLatestTerm() }} 屆議案資料，支援多種篩選條件和分頁瀏覽。
           </p>
           <NuxtLink to="/bill" class="btn btn-primary">
             開始查詢
@@ -142,7 +146,10 @@
   useHead({
     title: SITE_CONFIG.name,
     meta: [
-      { name: 'description', content: '國立臺北大學學生自治會三峽校區學生議會議事服務系統首頁' },
+      {
+        name: 'description',
+        content: `${SITE_CONFIG.fullName}第 ${getEarliestTerm()} 至 ${getLatestTerm()} 屆議事資訊網站首頁`,
+      },
     ],
   });
 
@@ -154,6 +161,8 @@
     server: false,
   });
   const stats = computed(() => statsResponse.value?.data ?? null);
+
+  import { getEarliestTerm, getLatestTerm } from '~~/shared/utils/term';
 
   import { EXTERNAL_LINKS, SITE_CONFIG } from '~~/shared/utils/constants';
 </script>

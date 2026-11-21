@@ -28,4 +28,7 @@ export const EXTERNAL_LINKS = {
   mainWebsite: 'https://ntpusu.ntpu.edu.tw/p/412-1015-175.php?Lang=zh-tw',
   // 委員會報告已移至學生會網站；本站 /committee-reports 亦以 routeRules 導向此處
   committeeReports: 'https://ntpusu.ntpu.edu.tw/p/412-1015-245.php?Lang=zh-tw',
+  // 學生議會議長開發之議事服務系統，自第 27 屆起之議案改於該處公開
+  // 原始碼：https://github.com/ntpuscs/Parliamentspage
+  parliamentSystem: 'https://ntpuscs.github.io/Parliamentspage/',
 };

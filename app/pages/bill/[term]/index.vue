@@ -16,6 +16,16 @@
 
     <div v-if="isOutOfRange" class="text-center text-red-500 font-bold my-12">
       僅有第 {{ getEarliestTerm() }} ~ {{ getLatestTerm() }} 屆資料
+      <p v-if="term > getLatestTerm()" class="mt-4 font-normal text-gray-700 dark:text-gray-300">
+        {{ `第 ${term} 屆之議案請至`
+        }}<a
+          :href="EXTERNAL_LINKS.parliamentSystem"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-semibold text-primary underline underline-offset-2 dark:text-primary-300"
+          >議事服務系統<span class="sr-only">（另開新視窗）</span></a
+        >查詢。
+      </p>
       <div class="mt-8 flex justify-center gap-4">
         <NuxtLink
           to="/bill"
@@ -101,6 +111,7 @@
   import { ref, computed } from 'vue';
   import { ExclamationTriangleIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
   import { getEarliestTerm, getLatestTerm, isValidTerm } from '~~/shared/utils/term';
+  import { EXTERNAL_LINKS } from '~~/shared/utils/constants';
 
   const route = useRoute();
   const term = parseInt(route.params.term);
