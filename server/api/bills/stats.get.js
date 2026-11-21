@@ -1,11 +1,12 @@
 // server/api/bills/stats.get.js
-// 首頁統計資訊：總議案數、目前屆次、本屆議案數，以及各屆議案數與議案類型分布
-import { getCurrentTerm, getEarliestTerm } from '~~/shared/utils/term';
+// 首頁統計資訊：總議案數、收錄屆次、最後一屆議案數，以及各屆議案數與議案類型分布
+import { getEarliestTerm, getLatestTerm } from '~~/shared/utils/term';
 
 const UNCATEGORIZED = '未分類';
 
 export default defineEventHandler(async (event) => {
-  const currentTerm = getCurrentTerm();
+  const earliestTerm = getEarliestTerm();
+  const latestTerm = getLatestTerm();
 
   // useBillService 內部已處理 CDN 失敗並拋出 H3 錯誤，這裡不需重複包裝
   const allBills = await useBillService().getAllBills();
@@ -23,7 +24,7 @@ export default defineEventHandler(async (event) => {
 
   // 各屆議案數：補齊無議案的屆次為 0，避免圖表出現斷層
   const byTerm = [];
-  for (let term = getEarliestTerm(); term <= currentTerm; term++) {
+  for (let term = earliestTerm; term <= latestTerm; term++) {
     byTerm.push({ term, count: countByTerm.get(term) ?? 0 });
   }
 
@@ -38,9 +39,9 @@ export default defineEventHandler(async (event) => {
   return {
     data: {
       totalBills: allBills.length,
-      currentTerm,
-      // 本屆議案：換屆過渡期若最新資料檔仍為舊屆，則自然為 0，與 getBillsByTerm 行為一致
-      thisTermBills: countByTerm.get(currentTerm) ?? 0,
+      earliestTerm,
+      latestTerm,
+      latestTermBills: countByTerm.get(latestTerm) ?? 0,
       byTerm,
       byType,
     },

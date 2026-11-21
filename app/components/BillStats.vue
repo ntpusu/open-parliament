@@ -63,31 +63,19 @@
                     {{ item.count }}
                   </span>
                   <div
-                    class="absolute inset-x-0 bottom-0 rounded-t"
-                    :class="
-                      item.isCurrent
-                        ? 'bg-primary dark:bg-primary-200'
-                        : 'bg-primary-400 dark:bg-primary-400/70'
-                    "
+                    class="absolute inset-x-0 bottom-0 rounded-t bg-primary-400 dark:bg-primary-400/70"
                     :style="{ height: `${item.percent}%` }"
                   ></div>
                 </div>
                 <div
-                  class="mt-2 border-t border-gray-300 pt-1 text-center text-xs dark:border-gray-600"
-                  :class="
-                    item.isCurrent
-                      ? 'font-semibold text-gray-900 dark:text-white'
-                      : 'text-gray-500 dark:text-gray-400'
-                  "
+                  class="mt-2 border-t border-gray-300 pt-1 text-center text-xs text-gray-500 dark:border-gray-600 dark:text-gray-400"
                   aria-hidden="true"
                 >
                   {{ item.term }}
                 </div>
               </li>
             </ol>
-            <p class="mt-1 text-center text-xs text-gray-500 dark:text-gray-400">
-              屆次（粗體標示本屆）
-            </p>
+            <p class="mt-1 text-center text-xs text-gray-500 dark:text-gray-400">屆次</p>
           </template>
         </figure>
 
@@ -96,7 +84,7 @@
           class="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-900"
         >
           <figcaption class="text-sm font-semibold text-gray-900 dark:text-white">
-            議案類型分布（歷屆合計）
+            議案類型分布（各屆合計）
           </figcaption>
           <div
             v-if="loading"
@@ -135,7 +123,7 @@
 
 <script setup>
   import { computed } from 'vue';
-  import { getEarliestTerm } from '~~/shared/utils/term';
+  import { getEarliestTerm, getLatestTerm } from '~~/shared/utils/term';
 
   const props = defineProps({
     // /api/bills/stats 回傳的 data；尚未載入時為 null
@@ -154,17 +142,17 @@
       {
         label: '總議案數',
         value: s ? Number(s.totalBills).toLocaleString('zh-TW') : null,
-        note: `第 ${getEarliestTerm()} 屆起累計`,
+        note: `第 ${getEarliestTerm()} 至 ${getLatestTerm()} 屆累計`,
       },
       {
-        label: '目前屆次',
-        value: s ? `第 ${s.currentTerm} 屆` : null,
-        note: '每年 7 月 1 日換屆',
+        label: '收錄屆次',
+        value: s ? `${s.byTerm.length} 屆` : null,
+        note: `第 ${getEarliestTerm()} 至 ${getLatestTerm()} 屆`,
       },
       {
-        label: '本屆議案數',
-        value: s ? Number(s.thisTermBills).toLocaleString('zh-TW') : null,
-        note: s?.currentTerm ? `第 ${s.currentTerm} 屆` : '',
+        label: `第 ${getLatestTerm()} 屆議案數`,
+        value: s ? Number(s.latestTermBills).toLocaleString('zh-TW') : null,
+        note: '本站收錄之最後一屆',
       },
     ];
   });
@@ -175,7 +163,6 @@
     if (!max) return [];
     return rows.map((r) => ({
       ...r,
-      isCurrent: r.term === props.stats.currentTerm,
       // 有議案但占比極小時仍保留可見的最小高度
       percent: r.count ? Math.max((r.count / max) * 100, 2) : 0,
     }));

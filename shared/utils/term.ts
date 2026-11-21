@@ -19,6 +19,8 @@ const getTaipeiYearMonth = (date: Date): { year: number; month: number } => {
  * 取得當前（最新）屆次
  * 判斷邏輯：每年 7 月 1 日到隔年 6 月 30 日為一屆（以臺北時間為準）。
  * 範例：2025年7月1日～2026年6月30日為第26屆。
+ * 注意：此為依日期推算之「實際」屆次，可能大於本站收錄之 LATEST_TERM；
+ * 判斷資料範圍時請改用 isValidTerm() / getValidTerms()。
  * @param now 計算基準時間，預設為現在（主要供測試使用）
  */
 export const getCurrentTerm = (now: Date = new Date()): number => {
@@ -32,35 +34,36 @@ export const getCurrentTerm = (now: Date = new Date()): number => {
 };
 
 /**
- * 取得所有有效屆次區間陣列
- * 需求：有效屆次為 23 屆以後到最新屆次，因為 23 屆是第一屆開始有系統性地使用議案系統者。
+ * 本站收錄之最早屆次：第 23 屆是第一屆開始有系統性地使用議案系統者。
  */
-export const getValidTerms = (): number[] => {
-  const currentTerm = getCurrentTerm();
-  const validTerms: number[] = [];
-
-  for (let term = 23; term <= currentTerm; term++) {
-    validTerms.push(term);
-  }
-
-  // 習慣上會將最新屆次排在最前面 (降冪)
-  return validTerms.reverse();
-};
-
-// 取得最早有效屆次
-export const getEarliestTerm = (): number => {
-  return 23;
-};
+export const EARLIEST_TERM = 23;
 
 /**
- * 檢查給定的議案陣列是否確實屬於當前屆次。
- * 場景：換屆時 bill_latestTerm.json 尚未更新，資料 term 仍為舊屆，
- * 但 getCurrentTerm() 已回傳新屆次，此時應回傳 false。
- *
- * @param bills  議案陣列
- * @returns      若任一個 bill.term === getCurrentTerm() 則為 true
+ * 本站收錄之最後屆次：自第 27 屆起，議案資料改由學生議會議長另行開發之
+ * 議事服務系統公開，本站不再收錄。
  */
-export const isCurrentTermBills = (bills: { term?: number | null }[]): boolean => {
-  const currentTerm = getCurrentTerm();
-  return bills.some((bill) => bill.term === currentTerm);
+export const LATEST_TERM = 26;
+
+/** 判斷某屆次是否在本站收錄範圍（第 23 至 26 屆）內 */
+export const isValidTerm = (term: unknown): term is number =>
+  typeof term === 'number' &&
+  Number.isInteger(term) &&
+  term >= EARLIEST_TERM &&
+  term <= LATEST_TERM;
+
+/**
+ * 取得本站收錄之所有屆次，最新屆次排在最前面（降冪）。
+ */
+export const getValidTerms = (): number[] => {
+  const validTerms: number[] = [];
+  for (let term = LATEST_TERM; term >= EARLIEST_TERM; term--) {
+    validTerms.push(term);
+  }
+  return validTerms;
 };
+
+// 取得最早收錄屆次
+export const getEarliestTerm = (): number => EARLIEST_TERM;
+
+// 取得最後收錄屆次
+export const getLatestTerm = (): number => LATEST_TERM;

@@ -61,7 +61,6 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import { ExclamationTriangleIcon, DocumentTextIcon } from '@heroicons/vue/24/outline';
-  import { getCurrentTerm } from '#imports';
   import { useRoute, createError, useFetch } from '#app';
   import type { Bill } from '~~/shared/types/bill';
 
@@ -88,7 +87,7 @@
     if (bill.value?.billNumber) {
       return bill.value.billNumber;
     } else {
-      return `第${getCurrentTerm()}屆未編號議案`;
+      return `第${term.value}屆未編號議案`;
     }
   });
 

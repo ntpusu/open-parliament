@@ -19,17 +19,11 @@
           <h2 class="text-xl font-bold text-gray-900 dark:text-white">學生議會</h2>
           <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">點擊查看本屆議案</p>
         </div>
-        <div
-          v-if="term === getCurrentTerm()"
-          class="bg-primary-500 dark:bg-primary-400 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg absolute top-0 right-0"
-        >
-          當前屆次
-        </div>
       </NuxtLink>
     </div>
 
     <div class="mt-12 text-center text-gray-500 dark:text-gray-400">
-      <p>資料範圍：第 {{ getEarliestTerm() }} 屆起</p>
+      <p>資料範圍：第 {{ getEarliestTerm() }} 屆至第 {{ getLatestTerm() }} 屆</p>
     </div>
 
     <!-- 舊版查詢系統連結 -->
@@ -79,24 +73,19 @@
 
 <script setup>
   import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
-  import { getCurrentTerm, getValidTerms, getEarliestTerm } from '~~/shared/utils/term';
+  import { getValidTerms, getEarliestTerm, getLatestTerm } from '~~/shared/utils/term';
 
   const { data: newestBills, pending, error } = await useFetch(`/api/bills?limit=10`);
 
   // SEO 設定（definePageMeta 的 title 不會寫入 <head>，須使用 useSeoMeta）
   useSeoMeta({
     title: '議案查詢',
-    description: `查看${ORG_DATA.nameZhFull}歷屆議案資料。`,
+    description: `查看${ORG_DATA.nameZhFull}第 ${getEarliestTerm()} 至 ${getLatestTerm()} 屆議案資料。`,
   });
 </script>
 
 <style scoped>
   .container {
     max-width: 1200px;
-  }
-
-  /* 確保 NuxtLink 的樣式能正常應用 */
-  .grid-cols-1 > a {
-    position: relative; /* 為了 "當前屆次" 標籤的定位 */
   }
 </style>

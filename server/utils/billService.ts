@@ -1,6 +1,6 @@
 // server/utils/billService.ts
 import type { Bill, BillResponse } from '~~/shared/types/bill';
-import { getCurrentTerm, isCurrentTermBills } from '~~/shared/utils/term';
+import { isValidTerm } from '~~/shared/utils/term';
 
 export const useBillService = () => {
   const CDN_BASE_URL = 'https://cdn.jsdelivr.net/gh/ntpusu/legislative-data@main/data';
@@ -31,81 +31,28 @@ export const useBillService = () => {
     }
   };
 
-  const getLatestTermBills = async (): Promise<Bill[]> => {
-    const res = await readJsonFile('bill_latestTerm.json');
-    return res.data;
-  };
-
-  const getPastTermBills = async (): Promise<Bill[]> => {
+  // 取得本站收錄（第 23 至 26 屆）之所有議案。
+  // 第 23 至 26 屆的議案均已歸檔於 bill_pastTerms.json；bill_latestTerm.json 自第 27 屆起
+  // 存放的是改由新議事服務系統管理的屆次，本站不再讀取。仍依屆次過濾，以免日後換屆時
+  // 第 27 屆以後的資料被併入 bill_pastTerms.json 而出現在本站。
+  const getAllBills = async (): Promise<Bill[]> => {
     const res = await readJsonFile('bill_pastTerms.json');
-    return res.data;
-  };
-
-  // 取得最新屆次議案資料的快取時間
-  const getLatestTermCachedAt = async (): Promise<string> => {
-    const res = await readJsonFile('bill_latestTerm.json');
-    return res.cachedAt;
-  };
-
-  // 取得歷屆議案資料的快取時間
-  const getPastTermsCachedAt = async (): Promise<string> => {
-    const res = await readJsonFile('bill_pastTerms.json');
-    return res.cachedAt;
-  };
-
-  // ── 內部輔助：判斷 targetTerm 的議案是否落在 bill_latestTerm.json 中 ──
-  // 換屆過渡期時，isCurrentTermBills(latest) 為 false，代表 latest
-  // 實際存放的是 currentTerm - 1 屆的資料，此時應從 latest 撈而非 past。
-  const resolveDataSource = async (
-    targetTerm: number,
-  ): Promise<{ bills: Bill[]; isCurrentTermData: boolean }> => {
-    const currentTerm = getCurrentTerm();
-
-    // 當前屆次 → 一定從 latest 撈
-    if (targetTerm === currentTerm) {
-      const latest = await getLatestTermBills();
-      return { bills: latest, isCurrentTermData: isCurrentTermBills(latest) };
-    }
-
-    // 前一屆次（currentTerm - 1）：先檢查 latest 是否仍為舊屆資料
-    if (targetTerm === currentTerm - 1) {
-      const latest = await getLatestTermBills();
-      if (!isCurrentTermBills(latest)) {
-        // latest 實際就是 targetTerm 的資料
-        return { bills: latest, isCurrentTermData: false };
-      }
-      // latest 已是 currentTerm 的資料，前屆在 past 裡
-      const past = await getPastTermBills();
-      return { bills: past, isCurrentTermData: false };
-    }
-
-    // 更早的屆次：一律從 past 撈
-    const past = await getPastTermBills();
-    return { bills: past, isCurrentTermData: false };
+    return res.data.filter((bill) => isValidTerm(bill.term));
   };
 
   // 取得特定屆次的所有議案
   const getBillsByTerm = async (targetTerm: number): Promise<Bill[]> => {
-    const currentTerm = getCurrentTerm();
-
-    if (targetTerm > currentTerm) {
+    if (!isValidTerm(targetTerm)) {
       return [];
     }
-
-    const { bills, isCurrentTermData } = await resolveDataSource(targetTerm);
-
-    // 請求的是當前屆次，但資料尚未更新
-    if (targetTerm === currentTerm && !isCurrentTermData) {
-      return [];
-    }
-
+    const bills = await getAllBills();
     return bills.filter((bill) => bill.term === targetTerm);
   };
 
   // 依議案總流水號（rowIndex）取得單一議案
   const getBillByRowIndex = async (targetRowIndex: number): Promise<Bill | undefined> => {
-    const allBills = await getAllBills();
-    return allBills.find((bill) => bill.rowIndex === targetRowIndex);
+    const bills = await getAllBills();
+    return bills.find((bill) => bill.rowIndex === targetRowIndex);
   };
 
   // 由屆次 + 流水號取得單一特定議案
@@ -113,35 +60,19 @@ export const useBillService = () => {
     targetTerm: number,
     targetSerialNumber: number,
   ): Promise<Bill | undefined> => {
-    const currentTerm = getCurrentTerm();
-    const { bills, isCurrentTermData } = await resolveDataSource(targetTerm);
-
-    // 請求的是當前屆次，但資料尚未更新
-    if (targetTerm === currentTerm && !isCurrentTermData) {
+    if (!isValidTerm(targetTerm)) {
       return undefined;
     }
-
-    // resolveDataSource 已取得完整的議案資料，直接回傳即可，
-    // 不需再經 getBillByRowIndex 重新下載兩份 JSON
+    const bills = await getAllBills();
     return bills.find(
       (bill) => bill.term === targetTerm && bill.serialNumber === targetSerialNumber,
     );
   };
 
-  // 取得所有議案
-  const getAllBills = async (): Promise<Bill[]> => {
-    const [latest, past] = await Promise.all([getLatestTermBills(), getPastTermBills()]);
-    return [...latest, ...past];
-  };
-
   return {
-    getLatestTermBills,
-    getPastTermBills,
-    getLatestTermCachedAt,
-    getPastTermsCachedAt,
+    getAllBills,
     getBillsByTerm,
     getBillByRowIndex,
     getBillById,
-    getAllBills,
   };
 };
